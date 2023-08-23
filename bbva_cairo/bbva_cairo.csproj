@@ -9,8 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Modulos\" />
     <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MTSEndososCET\MTSEndososCET.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,20 +1,15 @@
-﻿using ADODB;
-using static ADODB.LockTypeEnum;
-using static ADODB.CursorTypeEnum;
-
-
-using static System.Collections.Specialized.BitVector32;
-using bbva_cairo.Formularios;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
-using Microsoft.VisualBasic;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Security.Cryptography;
-using System.Collections.Immutable;
+using System.Text;
+using System.Threading.Tasks;
+using ADODB;
+using bbva_cairo.Classes;
+using bbva_cairo.Formularios;
 
-namespace bbva_cairo.Classes
+namespace bbva_cairo.Modulos
 {
-
-
 
     public static class ModGeneral
     {
@@ -226,7 +221,7 @@ namespace bbva_cairo.Classes
         //Tipo para el Manejo de las Carátulas
         //02/04/2001 RReyes
         public enum Caratulas                                          //Tipo para el resultado de las Caratulas
-        { 
+        {
             CPoliza = 0,                                                 //Carátulas de Pólizas
             CReciboDoctos = 1,                                           //Recibo de Documentos
             CProgPagos = 2,                                              //Programas de Pagos
@@ -237,7 +232,7 @@ namespace bbva_cairo.Classes
         //Tipo para el Manejo de los Endosos Internos
         //12/09/2002 RReyes
         public enum Endosos                                            //Tipo para selección del Endoso
-        { 
+        {
             Alta_Componente = 0,                                         //Forma de Endoso de Alta de Componente
             Baja_Fallecimiento = 1,                                         //Forma de Endoso de Baja de Componente
             Baja_Nupcias = 2,                                         //Forma de Endoso de Baja de Componente
@@ -261,7 +256,7 @@ namespace bbva_cairo.Classes
         //SDC 2007-06-26 Para utilizar en GeneraLayouts para la referencia de pago
         //Dar de alta aquí en un futuro si hay otro proceso de pago
         public enum ProcesoPago
-        { 
+        {
             PNomina = 0,
             PPagosVencidos = 1,
             PEndosos = 2,
@@ -271,10 +266,10 @@ namespace bbva_cairo.Classes
         }
 
         [DllImport("kernel32.dll", EntryPoint = "GetPrivateProfileStringA")]
-        public static extern long GetPrivateProfileString(string lpApplicationName,object lpKeyName, string lpDefault, string lpReturnedString, long nSize, string lpFileName);
+        public static extern long GetPrivateProfileString(string lpApplicationName, object lpKeyName, string lpDefault, string lpReturnedString, long nSize, string lpFileName);
 
         [DllImport("kernel32.dll", EntryPoint = "WritePrivateProfileStringA")]
-        public static extern long WritePrivateProfileString(string lpApplicationName, object lpKeyName, object lpString, string lpFileName );
+        public static extern long WritePrivateProfileString(string lpApplicationName, object lpKeyName, object lpString, string lpFileName);
 
         // Proyecto: México - Migrar Obsolescencia de BD Oracle Auditoría KPMG
         // Juan Martínez Díaz
@@ -287,12 +282,12 @@ namespace bbva_cairo.Classes
 
         //Función Api SetWindowLong
         [DllImport("user32.dll", EntryPoint = "WritePrivateProfileSectionA")]
-        public static extern long SetWindowLong(long hwnd, long nIndex, long dwNewLong );
+        public static extern long SetWindowLong(long hwnd, long nIndex, long dwNewLong);
 
 
         // Función Api CallWindowProc
         [DllImport("user32.dll", EntryPoint = "CallWindowProcA")]
-        public static extern long CallWindowProc(long lpPrevWndFunc, long hwnd, long Msg, long wParam, long lParam );
+        public static extern long CallWindowProc(long lpPrevWndFunc, long hwnd, long Msg, long wParam, long lParam);
 
         //constantes
         ////////////////////////////////////////////////
@@ -317,7 +312,7 @@ namespace bbva_cairo.Classes
         public static int RowPolBenef;
         public static string dFecha_SAOR;  //< Almacena la fecha del control txtResult(11) del formulario frmEndosoCET EBS 17/02/2016
         public static string sCboEndoso; //< Almacena la opcion elegida por el usuario CboEndoso en formulario frmEndosoCET EBS 17/02/2016
-        public static DateTime dFecha_Emision ; //< Almacena la fecha de endoso de la poliza EBS 17/02/2016
+        public static DateTime dFecha_Emision; //< Almacena la fecha de endoso de la poliza EBS 17/02/2016
 
         // Proyecto: México - Migrar Obsolescencia de BD Oracle Auditoría KPMG
         // Juan Martínez Díaz
@@ -400,34 +395,34 @@ namespace bbva_cairo.Classes
             //vgPassword = ""
         }
 
-    //    public static int ExistFile(string FileName)
-    //    {
-    //        Dim Filenum
+        //    public static int ExistFile(string FileName)
+        //    {
+        //        Dim Filenum
 
-    //        On Error GoTo Exist
+        //        On Error GoTo Exist
 
-    //        Filenum = FreeFile()
-    //        FileOpen(Filenum, FileName, OpenMode.Input)
-    //        ExistFile = True
-    //        FileClose(Filenum)
-    //        Exit Function
+        //        Filenum = FreeFile()
+        //        FileOpen(Filenum, FileName, OpenMode.Input)
+        //        ExistFile = True
+        //        FileClose(Filenum)
+        //        Exit Function
 
-    //Exist:
-    //        Select Case Err().Number
-    //            Case 53       //file not found
-    //                ExistFile = False
-    //            Case 55       //file already open
-    //                ExistFile = True
-    //            Case 58       //file already exists
-    //                ExistFile = True
-    //            Case 76       //path not found
-    //                ExistFile = False
-    //        End Select
+        //Exist:
+        //        Select Case Err().Number
+        //            Case 53       //file not found
+        //                ExistFile = False
+        //            Case 55       //file already open
+        //                ExistFile = True
+        //            Case 58       //file already exists
+        //                ExistFile = True
+        //            Case 76       //path not found
+        //                ExistFile = False
+        //        End Select
 
-    //        FileClose(Filenum)
-    //        Exit Function
+        //        FileClose(Filenum)
+        //        Exit Function
 
-    //    }
+        //    }
 
         private static void ReadINI(string INifile, string Seccion, string VARIABLE, object Resultado)
         {
@@ -466,7 +461,7 @@ namespace bbva_cairo.Classes
             else if (vCarater != '*')
                 iPosicion = 1;
             while (iPosicion > 0)
-            { 
+            {
                 iPosicion = sCriterio.IndexOf("*", 1);  //InStr(1, sCriterio, "*")
                 if (iPosicion > 0)
                 {
@@ -595,7 +590,7 @@ namespace bbva_cairo.Classes
 
         //Funcion General para El Recordset Desconectado
         //21/07/2000 GAcosta
-        public static Recordset rsRecordset(Recordset objRecordset, LockTypeEnum LockType = adLockBatchOptimistic, CursorTypeEnum CursorType = adOpenDynamic)
+        public static Recordset rsRecordset(Recordset objRecordset, LockTypeEnum LockType = LockTypeEnum.adLockBatchOptimistic, CursorTypeEnum CursorType = CursorTypeEnum.adOpenDynamic)
         {
             try
             {
@@ -634,16 +629,18 @@ namespace bbva_cairo.Classes
                 //        objRecordset.MoveNext()
                 //    End While
                 //End if
-                
-                }
+
+                return objNewRS;
+            }
             catch (Exception Err)
             {
                 //Screen.MousePointer = vbDefault
                 //errVB = Strings.Format(Err.Number) & vbTab & Err.Source & vbTab & Err.Description;
                 //gfMsgbox.Mensaje(" Error del Sistema Prospect ", frmMensaje.ETipos.vbOKDetails + vbCritical, "P R O S P E C T", , errVB)
+                return null;
             }
 
-            return objNewRS;
+
         }
 
 
@@ -757,7 +754,8 @@ namespace bbva_cairo.Classes
 
                 for (int i = 0; i < iLong; i++)
                 {
-                    if (sOriginal.Substring(iR, 1) == " ") {
+                    if (sOriginal.Substring(iR, 1) == " ")
+                    {
                         sPaterno = sOriginal.Substring(iPosicion[0], iR - 1);
                         iPosicion[1] = iR + 1;
                         break;
@@ -776,9 +774,9 @@ namespace bbva_cairo.Classes
                 }
 
 
-                if ( (sPaterno.Trim() == "DE") || (sPaterno.Trim() == "Y") || (sPaterno.Trim() == "DEL") || (sPaterno.Trim() == "LA"))
+                if ((sPaterno.Trim() == "DE") || (sPaterno.Trim() == "Y") || (sPaterno.Trim() == "DEL") || (sPaterno.Trim() == "LA"))
                 {
-                
+
                     for (int i = iR + 1; i <= iLong; i++)
                     {
                         if (sOriginal.Substring(iR, 1) == " ")
@@ -794,7 +792,8 @@ namespace bbva_cairo.Classes
                 {
                     for (int i = iR + 3; i < iLong; i++)
                     {
-                        if (sOriginal.Substring(iR, 1) == " ") {
+                        if (sOriginal.Substring(iR, 1) == " ")
+                        {
                             sPaterno = sPaterno + " " + sOriginal.Substring(iPosicion[1], iR - iPosicion[1]);
                             iPosicion[1] = iR + 1;
                             break;
@@ -802,7 +801,7 @@ namespace bbva_cairo.Classes
                     }
                 }
 
-                if (sOriginal.Substring(iR - 3, 3) == " LA") 
+                if (sOriginal.Substring(iR - 3, 3) == " LA")
                 {
                     for (int i = iR + 1; i < iLong; i++)
                     {
@@ -816,7 +815,7 @@ namespace bbva_cairo.Classes
                 }
 
                 //////////////////////////////////////////////////////////////////////////
-                if (sOriginal.Substring(iR + 1, 2) == "Y ") 
+                if (sOriginal.Substring(iR + 1, 2) == "Y ")
                 {
                     for (int i = iR + 3; i < iLong; i++)
                     {
@@ -908,11 +907,11 @@ namespace bbva_cairo.Classes
                     }
                 }
 
-                if ( sOriginal.Substring(iR - 3, 3) == " LA")
+                if (sOriginal.Substring(iR - 3, 3) == " LA")
                 {
                     for (int i = iR + 1; i < iLong; i++)
                     {
-                        if ( sOriginal.Substring(iR, 1) == " ")
+                        if (sOriginal.Substring(iR, 1) == " ")
                         {
                             sMaterno = sMaterno + " " + sOriginal.Substring(iPosicion[2], iR - iPosicion[2]);
                             iPosicion[2] = iR + 1;
@@ -921,7 +920,7 @@ namespace bbva_cairo.Classes
                     }
                 }
 
-                if ( (sOriginal.Substring(iR - 3, 3) == "VDA") || (sOriginal.Substring(iR - 4, 4) == "VDA.") )
+                if ((sOriginal.Substring(iR - 3, 3) == "VDA") || (sOriginal.Substring(iR - 4, 4) == "VDA."))
                 {
                     for (int i = iR + 1; i < iLong; i++)
                     {
@@ -1299,7 +1298,7 @@ namespace bbva_cairo.Classes
         public static string GetSysDir()
         {
             string Temp = new string(' ', 256);
-            long  X;
+            long X;
 
             X = GetSystemDirectoryA(Temp, Temp.Length); // Make API Call (Temp will hold return value)
             return Temp.Substring(0, Convert.ToInt32(X));              // Trim Buffer and return string
@@ -1307,12 +1306,12 @@ namespace bbva_cairo.Classes
 
         //SDC 20/02/2004
         //Regresa el directorio de Windows
-        private static string GetWinDir() 
+        private static string GetWinDir()
         {
             string Temp = new string('*', 255);
             long X;
             X = GetWindowsDirectoryA(Temp, Convert.ToInt64(Temp.Length));    // Make API Call (Temp will hold return value)
-            return  Temp.Substring(0, Convert.ToInt32(X));  //Left$(Temp, X)               // Trim Buffer and return string
+            return Temp.Substring(0, Convert.ToInt32(X));  //Left$(Temp, X)               // Trim Buffer and return string
         }
 
         //SDC 08/06/2004
@@ -1346,858 +1345,861 @@ namespace bbva_cairo.Classes
 
         //SDC 2004-12-06
         //Genera los dos archivos de entrada para el SUC
-        public Sub GeneraArchivosSUC(ByRef polizas As String, ByRef tFP As Date)
-            Dim rsRecord As ADODB.Recordset
-            Dim vParametros(4) As Object
-            Dim iRes As Integer
-            Dim objPolizas As Object
-            On Error GoTo msgerror
+        //    public void GeneraArchivosSUC(ref string polizas, ref DateTime tFP)
+        //    {
+        //        Recordset rsRecord;
+        //        object[] vParametros = new object[4];
+        //        int iRes;
+        //        object objPolizas;
 
-            //SetStatusBar("Generando archivos de entrada al SUC")
-            //Screen.MousePointer = vbHourglass
+        //        //On Error GoTo msgerror
 
-            Call VerificaFolder("C:\SUC2000\DATOS\")
-            objPolizas = CreateObject("MTSEndososCET.clsEndososCET")
+        //        //SetStatusBar("Generando archivos de entrada al SUC")
+        //        //Screen.MousePointer = vbHourglass
 
-            vParametros(0) = 0
-            vParametros(1) = polizas
-            vParametros(2) = Strings.Format(tFP, "yyyy-mm-dd")
-            vParametros(3) = giIDEmpresa
-            rsRecord = Nothing
-            iRes = objPolizas.iDatosSUC(grsErrADO, gsConexion, rsRecord, vParametros)
-            if iRes = DatosOK Then
-                rsRecord.MoveFirst()
-                FileOpen(1, "C:\SUC2000\DATOS\asegs.txt", OpenMode.Output)
-                Do While Not rsRecord.EOF
-                    Print(1, rsRecord.Fields("Texto").Value)
-                    rsRecord.MoveNext()
-                Loop
-                FileClose(1)
-                vParametros(0) = 1
-                rsRecord = Nothing
-                iRes = objPolizas.iDatosSUC(grsErrADO, gsConexion, rsRecord, vParametros)
-                if iRes = DatosOK Then
-                    rsRecord.MoveFirst()
-                    FileOpen(2, "C:\SUC2000\DATOS\benefs.txt", OpenMode.Output)
-                    Do While Not rsRecord.EOF
-                        Print(2, rsRecord.Fields("Texto").Value)
-                        rsRecord.MoveNext()
-                    Loop
-                    FileClose(2)
-                    gfMsgbox.Mensaje("Archivos asegs.txt y benefs.txt generados en C:\SUC2000\DATOS", vbInformation, "CAIRO")
-                elseif iRes = NoHayDatos Then
-                    gfMsgbox.Mensaje("Archivo asegs.txt generado en C:\SUC2000\DATOS", vbInformation, "CAIRO")
-                else
-                    gfMsgbox.Mensaje("Error del Sistema Cairo", frmMensaje.ETipos.vbOKDetails + vbCritical, "C A I R O", grsErrADO)
-                End if
-            elseif iRes = NoHayDatos Then
-                gfMsgbox.Mensaje("No existen datos.", vbInformation + vbOKOnly, "C A I R O")
-            else
-                gfMsgbox.Mensaje("Error del Sistema Cairo", frmMensaje.ETipos.vbOKDetails + vbCritical, "C A I R O", grsErrADO)
-            End if
+        //        VerificaFolder(@"C:\SUC2000\DATOS\");
 
-            //SetStatusBar("Listo")
-            //Screen.MousePointer = vbDefault
-            objPolizas = Nothing
-            Exit Sub
-    msgerror:
-            objPolizas = Nothing
-            //Screen.MousePointer = vbDefault
-            gsErrVB = Strings.Format$((Err.Number) & vbTab & Err.Source & vbTab & Err.Description)
-            gfMsgbox.Mensaje(" Error del Sistema Cairo ", frmMensaje.ETipos.vbOKDetails + vbCritical, "C A I R O", , gsErrVB)
-        End Sub
+        //        // objPolizas = CreateObject("MTSEndososCET.clsEndososCET")
+        //        objPolizas = new clsEndososCET();
 
+        //        vParametros[0] = 0;
+        //        vParametros[1] = polizas;
+        //        vParametros[2] = Strings.Format(tFP, "yyyy-mm-dd");
+        //        vParametros[3] = giIDEmpresa;
+        //        rsRecord = null;
 
-        //_______________________________________________________________
-        //Título: Verificacion de radiobutton
-        //Subrutina: iRadioOption
-        //Versión: 1.0
-        //Fecha:    30/03/2005
-        //Autor:    Samuel Dueñas
-        //Modificación:
-        //Fecha de Modificacion:
-        //_______________________________________________________________
-        //Descripción:
-        //       Regresa el Index del radiobutton seleccionado.
-        //_______________________________________________________________
+        //        iRes = objPolizas.iDatosSUC(grsErrADO, gsConexion, rsRecord, vParametros);
 
-
-        public Function iRadioOption(ByRef RadioOption As Object, max_count As Integer) As Integer
-            Dim iCont As Integer
-            For iCont = 0 To max_count
-                On Error Resume Next
-                if RadioOption(iCont).Value = True Then
-                    if Err.Number!= 340 Then
-                        iRadioOption = iCont
-                    End if
-                End if
-            Next
-        End Function
-
-        //_______________________________________________________________
-        //Título: Obtener nombre de archivo para escritura
-        //Subrutina: ObtenNombreArchivo
-        //Versión: 1.0
-        //Fecha:    07/04/2005
-        //Autor:    Samuel Dueñas
-        //Modificación:
-        //Fecha de Modificacion:
-        //_______________________________________________________________
-        //Descripción:
-        //       Regresa el Nombre de un archivo escrito por el usuario.
-        //_______________________________________________________________
-        // hace falta implementar esta funcion
-        // 19 mayo 2023
-        // RGB
-        //    public Function ObtenNombreArchivo(Extension As String, Titulo As String, Optional InitDir As String, Optional OverwritePrompt As Boolean = True, Optional Name As String) As String
-        //        On Error GoTo fin
-
-        //        ObtenNombreArchivo = Empty
-        //        Extension = Replace(Extension, ".", "")
-        //        With frmRentas.Dialog
-        //            .Filter = "Archivos de Tipo " & Extension & "|*." & Extension & "|Todos los Archivos|*.*"
-        //            .CancelError = True
-        //            .DialogTitle = Titulo
-        //            .DefaultExt = Extension
-        //            .InitDir = InitDir
-        //            .Flags = cdlOFNPathMustExist
-        //            //I Héctor García  18ene2012 Optimizar Proceso de Comisiones
-        //            .FileName = Name
-        //            //F Héctor García  18ene2012 Optimizar Proceso de Comisiones
-        //            if OverwritePrompt Then
-        //                .Flags = cdlOFNOverwritePrompt
-        //                .ShowSave
+        //        if (iRes == DatosOK)
+        //        {
+        //            rsRecord.MoveFirst();
+        //            FileOpen(1, "C:\SUC2000\DATOS\asegs.txt", OpenMode.Output)
+        //            Do While Not rsRecord.EOF
+        //                Print(1, rsRecord.Fields("Texto").Value)
+        //                rsRecord.MoveNext()
+        //            Loop
+        //            FileClose(1)
+        //            vParametros(0) = 1
+        //            rsRecord = Nothing
+        //            iRes = objPolizas.iDatosSUC(grsErrADO, gsConexion, rsRecord, vParametros)
+        //            if iRes = DatosOK Then
+        //                rsRecord.MoveFirst()
+        //                FileOpen(2, "C:\SUC2000\DATOS\benefs.txt", OpenMode.Output)
+        //                Do While Not rsRecord.EOF
+        //                    Print(2, rsRecord.Fields("Texto").Value)
+        //                    rsRecord.MoveNext()
+        //                Loop
+        //                FileClose(2)
+        //                gfMsgbox.Mensaje("Archivos asegs.txt y benefs.txt generados en C:\SUC2000\DATOS", vbInformation, "CAIRO")
+        //            elseif iRes = NoHayDatos Then
+        //                gfMsgbox.Mensaje("Archivo asegs.txt generado en C:\SUC2000\DATOS", vbInformation, "CAIRO")
         //            else
-        //                .ShowOpen
+        //                gfMsgbox.Mensaje("Error del Sistema Cairo", frmMensaje.ETipos.vbOKDetails + vbCritical, "C A I R O", grsErrADO)
         //            End if
+        //        elseif iRes = NoHayDatos Then
+        //            gfMsgbox.Mensaje("No existen datos.", vbInformation + vbOKOnly, "C A I R O")
+        //        else
+        //                gfMsgbox.Mensaje("Error del Sistema Cairo", frmMensaje.ETipos.vbOKDetails + vbCritical, "C A I R O", grsErrADO)
+        //        }
 
-        //            if .FileName = "" Then
-        //                ObtenNombreArchivo = Empty
-        //            else
-        //                ObtenNombreArchivo = .FileName
+        //        //SetStatusBar("Listo")
+        //        //Screen.MousePointer = vbDefault
+        //        objPolizas = Nothing
+        //        Exit Sub
+        //msgerror:
+        //        objPolizas = Nothing
+        //        //Screen.MousePointer = vbDefault
+        //        gsErrVB = Strings.Format$((Err.Number) & vbTab & Err.Source & vbTab & Err.Description)
+        //        gfMsgbox.Mensaje(" Error del Sistema Cairo ", frmMensaje.ETipos.vbOKDetails + vbCritical, "C A I R O", , gsErrVB)
+        //    }
+
+
+        //    //_______________________________________________________________
+        //    //Título: Verificacion de radiobutton
+        //    //Subrutina: iRadioOption
+        //    //Versión: 1.0
+        //    //Fecha:    30/03/2005
+        //    //Autor:    Samuel Dueñas
+        //    //Modificación:
+        //    //Fecha de Modificacion:
+        //    //_______________________________________________________________
+        //    //Descripción:
+        //    //       Regresa el Index del radiobutton seleccionado.
+        //    //_______________________________________________________________
+
+
+        //    public Function iRadioOption(ByRef RadioOption As Object, max_count As Integer) As Integer
+        //        Dim iCont As Integer
+        //        For iCont = 0 To max_count
+        //            On Error Resume Next
+        //            if RadioOption(iCont).Value = True Then
+        //                if Err.Number!= 340 Then
+        //                    iRadioOption = iCont
+        //                End if
         //            End if
-        //        End With
-        //fin:
+        //        Next
         //    End Function
 
-        //_______________________________________________________________
-        //Título: Generar archivo separado por comas de un recordset
-        //Subrutina: GeneraReporte
-        //Versión: 1.0
-        //Fecha:    02/08/2005
-        //Autor:    Samuel Dueñas
-        //Modificación:
-        //Fecha de Modificacion:
-        //_______________________________________________________________
-        //Descripción:
-        //       Crea un archivo separado por comas para ser abierto en excel.
-        //   Se puede usar también para generar TXT del estilo del IMSS.
-        //_______________________________________________________________
-
-        public Sub GeneraCSV(ByRef rsData As Recordset, ByRef sNombreArchivo As String, bTitulos As Boolean, Optional bMensaje As Boolean = True)
-            Dim nCanal As Integer
-            Dim sCadena As String
-            Dim X As Integer
-
-            nCanal = FreeFile()
-            On Error Resume Next
-            FileOpen(1, sNombreArchivo, OpenMode.Output)
-            if Err().Number!= 0 Then
-                gfMsgbox.Mensaje("Imposible abrir el Archivo para escritura.", vbInformation, gsModulo)
-                Exit Sub
-            End if
-
-            rsData.MoveFirst()
-
-            if Not rsData.EOF Then
-                sCadena = ""
-
-                if bTitulos Then
-                    For X = 0 To rsData.Fields.Count - 1
-                        sCadena = sCadena & Chr(34) & rsData(X).Name & Chr(34) & ","
-                    Next
-                    Print(1, sCadena)
-                End if
-
-                While Not rsData.EOF
-                    sCadena = ""
-                    For X = 0 To rsData.Fields.Count - 1
-                        sCadena = sCadena + rsData(X).Value + Iif(rsData.Fields.Count = 1, "", ",")
-                    Next
-                    Print(1, sCadena)
-                    rsData.MoveNext()
-                End While
-                if bMensaje Then
-                    gfMsgbox.Mensaje("Archivo generado exitosamente en " & sNombreArchivo, vbInformation, gsModulo)
-                End if
-            End if
-
-            FileClose(1)
-            On Error GoTo 0
-
-        End Sub
-
-        public Function dMaximo(ByRef dUno As Double, ByRef dDos As Double) As Double
-            if dUno > dDos Then
-                dMaximo = dUno
-            else
-                dMaximo = dDos
-            End if
-        End Function
-
-        public Function iMaximo(ByRef iUno As Integer, ByRef iDos As Integer) As Integer
-            if iUno > iDos Then
-                iMaximo = iUno
-            else
-                iMaximo = iDos
-            End if
-        End Function
-
-        //_______________________________________________________________
-        //Título: Generar archivo de Excel a partir de un recordset
-        //Subrutina: GeneraXLS
-        //Versión: 1.0
-        //Fecha:    2007-06-15
-        //Autor:    Samuel Dueñas
-        //Modificación:
-        //Fecha de Modificacion:
-        //_______________________________________________________________
-        //Descripción:
-        //   Crea un archivo de Excel con los mismos parametros de entrada
-        //   que la funcion GeneraCSV. Pueden ser intercambiables, sin embargo,
-        //   esta función es muy lenta.
-        //_______________________________________________________________
-        public Sub GeneraXLS(ByRef rsData As Recordset, ByRef sNombreArchivo As String, bTitulos As Boolean, Optional bMensaje As Boolean = True)
-            Dim objXcel As Excel.Worksheet
-            Dim AppExcel As Excel.Application
-            Dim lRow As Long
-            Dim iCol As Integer
-            Dim lTotal As Long
-            On Error GoTo msgerror
-
-            //Screen.MousePointer = vbHourglass
-
-            lRow = 1
-            iCol = 1
-
-            rsData.MoveFirst()
-
-            if Not rsData.EOF Then
-                lTotal = rsData.RecordCount
-
-                if lTotal > 65535 Then
-                    gfMsgbox.Mensaje("No se puede guardar a Excel, más de 65535 registros.", vbExclamation, "CAIRO")
-                    Exit Sub
-                End if
-
-                AppExcel = New Excel.Application
-                AppExcel.Workbooks.Add()
-                objXcel = AppExcel.Worksheets(1)
-
-                if bTitulos Then
-                    For iCol = 1 To rsData.Fields.Count
-                        objXcel.Cells(lRow, iCol).Font.Bold = True
-                        objXcel.Cells(lRow, iCol) = rsData(iCol - 1).Name
-                    Next
-                    lRow = lRow + 1
-                End if
-
-                While Not rsData.EOF
-                    For iCol = 1 To rsData.Fields.Count
-                        //Se agrega el if para evaluar si la celda es de tipo fecha Reporte Prescripcion Version 2 EBS 01/JULIO/2016
-                        if IsDate(rsData(iCol - 1)) And InStr(1, sNombreArchivo, "PrescPolGpo", vbTextCompare) != 0 Then
-                            objXcel.Cells(lRow, iCol) = FormatDateTime(rsData(iCol - 1).Value, vbShortDate)
-                        else
-                            //-- Inicio Reporte Saldo Vivienda EBS 08/MARZO/2017 -------------------------------------------------------------------
-                            if rsData(iCol - 1).Name!= "Poliza" And IsNumeric(rsData(iCol - 1)) And InStr(1, sNombreArchivo, "SaldoVivienda", vbTextCompare) != 0 Then
-                                objXcel.Cells(lRow, iCol) = FormatCurrency(rsData(iCol - 1), 2, vbFalse, vbFalse, vbTrue)
-                            else
-                                //-- Fin Reporte Saldo Vivienda EBS 08/MARZO/2017 -------------------------------------------------------------------
-                                objXcel.Cells(lRow, iCol) = rsData(iCol - 1) //<-- esta linea ya existia EBS 01/JULIO/2016
-                            End if
-                        End if
-                    Next
-                    rsData.MoveNext()
-                    //SetStatusBar("Exportando a Excel registro " & lRow - 1 & " de " & lTotal & " ...")
-                    lRow = lRow + 1
-                End While
-
-                AppExcel.Workbooks(1).SaveAs(sNombreArchivo)
-                AppExcel.Workbooks.Close()
-                AppExcel.DisplayAlerts = True
-                AppExcel.Quit()
-                AppExcel = Nothing
-
-                if bMensaje Then
-                    gfMsgbox.Mensaje("Archivo generado exitosamente en " & sNombreArchivo, vbInformation, "CAIRO")
-                End if
-            End if
-
-            //Screen.MousePointer = vbDefault
-            Exit Sub
-    msgerror:
-            //Screen.MousePointer = vbDefault
-            gsErrVB = Strings.Format$((Err.Number) & vbTab & Err.Source & vbTab & Err.Description)
-            gfMsgbox.Mensaje("Error del Sistema Cairo", frmMensaje.ETipos.vbOKDetails + vbCritical, "CAIRO", , gsErrVB)
-        End Sub
-
-
-        // ------------------------------------------------------------------
-        // Título:       Rutinas Generales de Prestamos ISSSTE
-        // Modulo:       modGeneral.bas
-        // Versión:      1.0
-        // Fecha:        19/Nov/2009
-        // Autor:        Silvia Gabriela Rodriguez Ruiz
-        // Modificación:
-        //
-        // ------------------------------------------------------------------
-        // Descripción:
-        // Este modulo provee rutinas más utilizadas en forma general,
-        // como son formatos de campos, obtención de datos, validaciones de
-        // datos.
-
-
-        public Function iUbicaElementoCombo(objCmb As Object, sClave As String) As Integer
-            // Función:  iUbicaElementoCombo
-            //
-            // Descripción:
-            //    Esta función obtiene la posición de un dato especifico, en un combo.
-            //
-            // Uso:
-            //    cboLista.ListIndex = iUbicaElementoCombo(cboLista, "Elemento 5")
-            //
-            // Fecha: 19/Nov/2009
-            // Autor: Silvia Gabriela Rodriguez Ruiz
-
-            Dim iIndex As Integer
-            Dim iPosicion As Integer
-            Dim sError As String
-
-            On Error GoTo iUbicaElementoCombo_Err
-
-            iPosicion = -1
-            iIndex = 0
-            While iIndex<objCmb.ListCount And iPosicion = -1
-                objCmb.ListIndex = iIndex
-                if Mid(objCmb.Text, 1, Len(sClave)) = sClave Then
-                    iPosicion = iIndex
-                End if
-                iIndex = iIndex + 1
-            End While
-
-    iUbicaElementoCombo_Sal:
-            iUbicaElementoCombo = iPosicion
-            Exit Function
-
-    iUbicaElementoCombo_Err:
-            iPosicion = -1
-            sError = Err.Number & " " & Err.Description
-            Resume iUbicaElementoCombo_Sal
-
-        End Function
-
-        public Function OnlyNumbers(intAsc As Integer) As Byte
-            // Función:  OnlyNumbers
-            //
-            // Descripción:
-            //    Esta función solo valida que el caracter presionado
-            //    sea numerico.
-            //
-            // Uso:
-            //    KeyAscii = OnlyNumbers(Asc(UCase(Chr(KeyAscii))))
-            //
-            // Fecha: 19/Nov/2009
-            // Autor: Silvia Gabriela Rodriguez Ruiz
-
-            Dim bytAscci As Byte
-            On Error GoTo OnlyNumbers_Err
-
-            if(intAsc >= 48 And intAsc <= 57) Then
-                bytAscci = intAsc
-            else
-                if intAsc = 8 Then
-                    bytAscci = intAsc
-                else
-                    bytAscci = 0
-                End if
-            End if
-
-    OnlyNumbers_Sal:
-            OnlyNumbers = bytAscci
-            Exit Function
-
-    OnlyNumbers_Err:
-            bytAscci = 0
-            Resume OnlyNumbers_Sal
-
-        End Function
-
-        public Function CaracterInvalido(intAsc As Integer) As Byte
-            // Función:  OnlyNumbers
-            //
-            // Descripción:
-            //    Funcion que permite limitar los caracteres que pueden ser tecleados en un text box, esta funcion
-            //    no permite la captura de caracteres como ", `, // # , no se permite que se capturen estos caracteres
-            //    ya que confunden la información con el uso de querys.
-            //
-            // Uso:
-            //    KeyAscii = OnlyNumbers(Asc(UCase(Chr(KeyAscii))))
-            //
-            // Fecha: 19/Nov/2009
-            // Autor: Silvia Gabriela Rodriguez Ruiz
-
-            // Objetivo:
-            Dim bytAscci As Byte
-            On Error GoTo CaracterInvalido_Err
-
-            if(intAsc >= 32 And intAsc <= 125) Or
-           (intAsc = 8) Or
-           (intAsc = 3) Or
-           (intAsc = 22) Or
-           (intAsc = Asc(vbCrLf)) Or
-            (intAsc = Asc(vbCr)) Then
-                if intAsc = 34 Or intAsc = 39 Or intAsc = 96 Or intAsc = 44 Then
-                    bytAscci = 0
-                else
-                    bytAscci = intAsc
-                End if
-            else
-                if intAsc = 193 Or intAsc = 201 Or intAsc = 205 Or
-               intAsc = 211 Or intAsc = 218 Or intAsc = 225 Or
-               intAsc = 233 Or intAsc = 237 Or intAsc = 243 Or
-               intAsc = 250 Then
-                    bytAscci = intAsc
-                End if
-            End if
-
-    CaracterInvalido_Sal:
-            CaracterInvalido = bytAscci
-            Exit Function
-
-    CaracterInvalido_Err:
-            bytAscci = 0
-            Resume CaracterInvalido_Sal
-        End Function
-
-        //02 de marzo 2011 RCS
-        //se encarga de eliminar los campos repetidos en un rs
-
-        public Function quitaCamposRepetidos(ByVal objRecordset As Recordset, Optional ByVal LockType As LockTypeenum = adLockBatchOptimistic, Optional ByVal CursorType As CursorTypeenum = adOpenDynamic) As Recordset
-            On Error GoTo msgerror
-            Dim objNewRS As ADODB.Recordset
-            Dim objField As Object
-            Dim objField1 As Object
-
-            Dim lngCnt As Long
-            Dim errVB As String
-
-            objNewRS = New ADODB.Recordset
-            objNewRS.CursorLocation = adUseClient
-            objNewRS.LockType = LockType
-            objNewRS.CursorType = CursorType
-
-            Dim i, conta, Contador As Integer
-            conta = 1
-
-            Dim nameStr As String
-            Dim typeSTR As String
-            Dim sizeStr As String
-            Dim attrib As String
-
-            Dim camposNoRepetidos() As String
-            Dim typeMATRIZ() As String
-            Dim sizeMATRIZ() As String
-            Dim attribMATRIZ() As String
-
-            i = 0
-            For Each objField In objRecordset.Fields
-
-                Contador = 1
-                For Each objField1 In objRecordset.Fields
-                    if objField1.Name = objField.Name Then
-                        if Contador = 1 Then
-                            if InStr(nameStr, objField.Name) < 1 Then
-                                nameStr = nameStr & "," & objField.Name
-                                sizeStr = sizeStr & "," & objField.DefinedSize
-                                typeSTR = typeSTR & "," & objField.Type
-                                attrib = attrib & "," & objField.Attributes
-                            End if
-                        End if
-                        Contador = Contador + 1
-                    End if
-                Next objField1
-            Next objField
-
-            camposNoRepetidos = Split(nameStr, ",")
-            typeMATRIZ = Split(typeSTR, ",")
-            sizeMATRIZ = Split(sizeStr, ",")
-            attribMATRIZ = Split(attrib, ",")
-
-            For i = 1 To UBound(camposNoRepetidos)
-                objNewRS.Fields.Append(camposNoRepetidos(i), typeMATRIZ(i), sizeMATRIZ(i), attribMATRIZ(i))
-            Next i
-
-            objNewRS.Open()
-
-            if Not objRecordset.RecordCount = 0 Then
-                objRecordset.MoveFirst()
-
-                While Not objRecordset.EOF
-                    objNewRS.AddNew()
-
-                    For lngCnt = 0 To UBound(camposNoRepetidos) - 1
-                        objNewRS.Fields(lngCnt).Value = objRecordset.Fields(camposNoRepetidos(lngCnt + 1)).Value
-                    Next lngCnt
-                    objRecordset.MoveNext()
-                End While
-            End if
-            quitaCamposRepetidos = objNewRS
-
-            Exit Function
-
-    msgerror:
-            //Screen.MousePointer = vbDefault
-            errVB = Strings.Format$((Err.Number) & vbTab & Err.Source & vbTab & Err.Description)
-            gfMsgbox.Mensaje(" Error del Sistema Prospect ", frmMensaje.ETipos.vbOKDetails + vbCritical, "P R O S P E C T", , errVB)
-        End Function
-        public Function FindeMes(sMonth As String, sYear As String) As String
-
-            Select Case sMonth
-                Case Is = "01", "03", "05", "07", "08", "10", "12"
-                    FindeMes = "31"
-                Case Is = "04", "06", "09", "11"
-                    FindeMes = "30"
-                Case Is = "02"
-                    if Int(sYear / 4) = sYear / 4 Then
-                        FindeMes = "29"
-                    else
-                        FindeMes = "28"
-                    End if
-            End Select
-
-        End Function
-
-
-        //Inicio. Alexander Hdez 12/06/2012 Codigos Postales YA9A0F
-        //----------------------------------------------------------------------------------------//
-        //------------------   Funcion de validacion de entrada de datos, acepta lo que le llegue en ValidString   ----------------------//
-        //----------------------------------------------------------------------------------------//
-        Function Valida_TextoMinMay(KeyIn As Integer, ValidString As String, Editable As Boolean) As Integer
-            Dim ValidList As String, KeyOut As Integer
-
-            ValidList = Iif(Editable, ValidString & Chr(8), ValidString)
-
-            if InStr(1, ValidList, Chr(KeyIn), 1) > 0 Then
-                KeyOut = Iif(Editable, KeyIn, 0)
-            else
-                KeyOut = Iif(Editable, 0, Chr(KeyIn))
-            End if
-
-            Valida_TextoMinMay = KeyOut
-        End Function
-
-
-        Function Valida_Texto(KeyIn As Integer, ValidString As String, Editable As Boolean) As Integer
-            Dim ValidList As String, KeyOut As Integer
-
-            ValidList = Iif(Editable, UCase(ValidString) & Chr(8), UCase(ValidString))
-
-            if InStr(1, ValidList, UCase(Chr(KeyIn)), 1) > 0 Then
-                KeyOut = Iif(Editable, Asc(UCase(Chr(KeyIn))), 0)
-            else
-                KeyOut = Iif(Editable, 0, Asc(UCase(Chr(KeyIn))))
-            End if
-
-            Valida_Texto = KeyOut
-        End Function
-        //Fin. Alexander Hdez 12/06/2012
-
-        //Inicio. Alexander Hdez 12/06/2012 Codigos Postales YA9A0F
-        //----------------------------------------------------------------------------------------//
-        //------------------   Funcion para Proceso de Codigos Postales  ----------------------//
-        //----------------------------------------------------------------------------------------//
-
-        public Function ExcelsePOMEX(rutaSEPOMEX As String)
-
-            Dim errVB As String
-            Dim Estados(33) As String
-            Dim TamMatriz As Integer
-            Dim i As Integer
-            Dim ArchivoE As String
-
-            Dim cnn As New ADODB.Connection
-            Dim cnConn As New ADODB.Connection
-            Dim lNumRegAfect As Long
-            Dim strSQL As String
-            Dim rs As New ADODB.Recordset
-            Dim j As Integer
-            Dim iCountCargaCP As Long
-
-            On Error GoTo msgerror
-
-            Dim ObjExcel As New Excel.Application
-            Dim ObjW As Object
-            ObjW = ObjExcel.Workbooks.Open(rutaSEPOMEX)
-
-
-            TamMatriz = ObjW.Sheets.Count
-
-            For i = 2 To ObjW.Sheets.Count
-                Estados(i) = ObjW.Sheets(i).Name
-            Next
-
-            ObjW.Close
-            ObjW = Nothing
-
-            cnConn.CommandTimeout = 0
-            cnConn.Open(gsConexion) //Conexion para Chairo
-
-            TamMatriz = UBound(Estados)
-
-            With cnn
-                .CommandTimeout = 0
-                .Provider = "Microsoft.Jet.OLEDB.4.0"
-                .ConnectionString = "Data Source=" & rutaSEPOMEX & " "
-                //.Properties("Extended Properties") = "Excel 8.0" //This is a read only properti
-                .Open()
-            End With
-
-            strSQL = ""
-            strSQL = strSQL & " Delete from Cat_Sepomex  "
-            cnConn.Execute(strSQL)
-
-            //frmCatCodigosPostales.pgbCargaCP.Visible = False
-
-            For j = 2 To TamMatriz //- 1
-                //frmCatCodigosPostales.pgbCargaCP.Value = 0
-                //iCountCargaCP = 1
-
-                strSQL = ""
-                strSQL = strSQL & "if  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N//[dbo].[TmpEstadoSEPOMEX]//) AND type in (N//U//)) "
-                strSQL = strSQL & "DROP TABLE [dbo].[TmpEstadoSEPOMEX] "
-                cnConn.Execute(strSQL)
-
-
-                strSQL = ""
-                strSQL = strSQL & "SELECT * INTO [ODBC;" & gsConexion & "].TmpEstadoSEPOMEX "
-                strSQL = strSQL & "FROM [" & Estados(j) & "] "
-                cnn.Execute(strSQL)
-
-
-                //    strSQL = ""
-                //    strSQL = "Select * from TmpEstadoSEPOMEX"
-                //
-                //    With rs
-                //        .ActiveConnection = cnConn
-                //        .CursorType = adOpenDynamic
-                //        .CursorLocation = adUseClient
-                //        .Open strSQL
-                //    End With
-                //
-                //    frmCatCodigosPostales.pgbCargaCP.Max = rs.RecordCount
-                //
-                //    if Not rs.EOF Then
-                //        rs.MoveFirst
-                //        Do While Not rs.EOF
-                //            strSQL = ""
-                //            strSQL = strSQL & "Insert Into Cat_Sepomex(d_codigo,d_asenta,d_tipo_asenta,D_mnpio,d_estado,d_ciudad,d_CP,c_estado,c_oficina,c_CP,c_tipo_asenta,c_mnpio,id_asenta_cpcons,d_zona,c_cve_ciudad) "
-                //            strSQL = strSQL & "Values(//" & rs.Fields("d_codigo") & "//,//" & rs.Fields("d_asenta") & "//,//" & rs.Fields("d_tipo_asenta") & "//,//" & rs.Fields("D_mnpio") & "//,//" & rs.Fields("d_estado") & "//,//" & rs.Fields("d_ciudad") & "//,//" & rs.Fields("d_CP") & "//,//" & rs.Fields("c_estado") & "//,//" & rs.Fields("c_oficina") & "//,//" & rs.Fields("c_CP") & "//,//" & rs.Fields("c_tipo_asenta") & "//,//" & rs.Fields("c_mnpio") & "//,//" & rs.Fields("id_asenta_cpcons") & "//,//" & rs.Fields("d_zona") & "//,//" & rs.Fields("c_cve_ciudad") & "//)"
-                //            cnConn.Execute (strSQL)
-                //            rs.MoveNext
-                //
-                //            frmCatCodigosPostales.pgbCargaCP.Value = iCountCargaCP
-                //            iCountCargaCP = iCountCargaCP + 1
-                //
-                //        Loop
-                //        rs.Close
-                //    End if
-                strSQL = ""
-                strSQL = strSQL & "Insert Into Cat_Sepomex(d_codigo,d_asenta,d_tipo_asenta,D_mnpio,d_estado,d_ciudad,d_CP,c_estado,c_oficina,c_CP,c_tipo_asenta,c_mnpio,id_asenta_cpcons,d_zona,c_cve_ciudad) "
-                strSQL = strSQL & "Select * from TmpEstadoSEPOMEX "
-                cnConn.Execute(strSQL)
-
-            Next
-
-
-
-            strSQL = ""
-            strSQL = strSQL & " exec sp_ActualizaAcentosSEPOMEX "
-            cnConn.Execute(strSQL)
-
-            strSQL = ""
-            strSQL = strSQL & " exec sp_InsertColSEPOMEXvsCAIRO "
-            cnConn.Execute(strSQL)
-
-
-            rs = Nothing
-            cnConn.Close()
-            cnConn = Nothing
-
-
-            Exit Function
-    msgerror:
-            errVB = Strings.Format((Err.Number) & vbTab & Err.Source & vbTab & Err.Description)
-            //Set rsErrAdo = ErroresDLL(Nothing, errVB)
-
-        End Function
-        //Fin. Alexander Hdez 12/06/2012
-
-
-
-
-        //Inicio. Alexander Hdez 22/10/2012 Codigos Postales YA9A0F
-        //----------------------------------------------------------------------------------------//
-        //------------------   Funcion para Proceso de Codigos Postales, valida Email  ----------------------//
-        //----------------------------------------------------------------------------------------//
-
-        public Function Validar_Email(ByVal Email As String) As Boolean
-
-            Dim i As Integer, iLen As Integer, caracter As String
-            Dim pos As Integer, bp As Boolean, ipos As Integer, iPos2 As Integer
-
-            On Error GoTo Err_Sub
-
-            Email = Trim$(Email)
-
-            if Email = vbNullString Then
-                Exit Function
-            End if
-
-            Email = LCase$(Email)
-            iLen = Len(Email)
-
-
-            For i = 1 To iLen
-                caracter = Mid(Email, i, 1)
-
-                if(Not (caracter Like "[a-z]")) And(Not (caracter Like "[0-9]")) Then
-
-                    if InStr(1, "_-" & "." & "@", caracter) > 0 Then
-                        if bp = True Then
-                            Exit Function
-                        else
-                            bp = True
-
-                            if i = 1 Or i = iLen Then
-                                Exit Function
-                            End if
-
-                            if caracter = "@" Then
-                                if ipos = 0 Then
-                                    ipos = i
-                                else
-
-                                    Exit Function
-                                End if
-                            End if
-                            if caracter = "." Then
-                                iPos2 = i
-                            End if
-
-                        End if
-                    else
-
-                        Exit Function
-                    End if
-                else
-                    bp = False
-                End if
-            Next i
-            if ipos = 0 Or iPos2 = 0 Then
-                Exit Function
-            End if
-
-            if iPos2<ipos Then
-                Exit Function
-            End if
-
-
-            Validar_Email = True
-
-            Exit Function
-    Err_Sub:
-            On Error Resume Next
-
-            Validar_Email = False
-        End Function
-        //Fin. Alexander Hdez 22/10/2012
-
-
-        //Alexander Hdez 2014-01-08, funcion que desabilita el menu contextuald e la cuenta de titulares
-        //Inicio
-        //Comienza el Hook
-
-        // hace falta implementar esta funcion
-        // 19 mayo 2023
-        // RGB
-        //public Sub Hook(Handle As Long)
-        //    lpPrevWndProc = SetWindowLong(Handle, -4, AddressOf WinProc)
-        //End Sub
-
-        //Termina el Hook
-        public Sub Unhook(Handle As Long)
-            Call SetWindowLong(Handle, -4, lpPrevWndProc)
-        End Sub
-
-        //Procedimiento chequea los mensajes que llegan _
-        //para ver si se despliega el menú contextual _
-        //en el textbox indicado
-        //Private ReadOnly DatosOK As Integer
-        //Private ReadOnly NoHayDatos As Integer
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        public Function WinProc(ByVal hwnd As Long,
-                                ByVal Msg As Long,
-                                ByVal wParam As Long,
-                                ByVal lParam As Long) As Long
-            // Chequea si el mensaje  es WM_CONTEXTMENU ( el menú contextual )
-            if Msg = WM_CONTEXTMENU Then
-                WinProc = True
-            else
-                WinProc = CallWindowProc(lpPrevWndProc,
-                                  hwnd, Msg, wParam, lParam)
-            End if
-        End Function
-        //Fin Alexander Hdez 2014-01-08
-
-        // Proyecto: México - Migrar Obsolescencia de BD Oracle Auditoría KPMG
-        // Juan Martínez Díaz
-        // 2022-11-23
-        public Sub prObtieneConexionBase2019()
-            vgNombre_ini = "c:\Cairo\Cairo2000.ini"
-            if ExistFile(vgNombre_ini) Then
-                ReadINI(vgNombre_ini, "SERVIDOR_2", "Servidor", gsServidor)
-                ReadINI(vgNombre_ini, "ODBC_2", "DSN", gsDSN)
-                ReadINI(vgNombre_ini, "USUARIO_2", "UID", gsUsrBD)
-                ReadINI(vgNombre_ini, "PASSWORD_2", "PWD", gsPwdBD)
-                // variables de .Net
-                ReadINI(vgNombre_ini, "ODBC_NETCRYSTAL_2", "DSN", gsDSN_NetCrystal)
-                ReadINI(vgNombre_ini, "SERVIDOR_NET_2", "Servidor", gsServidor_Net)
-                ReadINI(vgNombre_ini, "ODBC_NET_2", "DSN", gsDSN_Net)
-                ReadINI(vgNombre_ini, "USUARIO_NET_2", "UID", gsUsrBD_Net)
-                ReadINI(vgNombre_ini, "PASSWORD_NET_2", "PWD", gsPwdBD_Net)
-
-                ReadINI(vgNombre_ini, "SERVIDORMTS_2", "Servidormts", gsServidorMTS)
-            End if
-        End Sub
-
-        // Proyecto: México - Migrar Obsolescencia de BD Oracle Auditoría KPMG
-        // Juan Martínez Díaz
-        // 2022-11-23
-        public Sub prObtieneConexionBase2019Dualidad(ByRef prgsServidor As String, ByRef prgsDSN As String, ByRef prgsUsrBD As String, ByRef prgsPwdBD As String)
-            vgNombre_ini = "c:\Cairo\Cairo2000.ini"
-            if ExistFile(vgNombre_ini) Then
-                ReadINI(vgNombre_ini, "SERVIDOR_2", "Servidor", prgsServidor)
-                ReadINI(vgNombre_ini, "ODBC_2", "DSN", prgsDSN)
-                ReadINI(vgNombre_ini, "USUARIO_2", "UID", prgsUsrBD)
-                ReadINI(vgNombre_ini, "PASSWORD_2", "PWD", prgsPwdBD)
-            End if
-        End Sub
-
-        public static string Midstr(string cadema, int inicia, int longitud)
-        {
-            return cadema.Substring(inicia, longitud);
-            
-        }
+        //    //_______________________________________________________________
+        //    //Título: Obtener nombre de archivo para escritura
+        //    //Subrutina: ObtenNombreArchivo
+        //    //Versión: 1.0
+        //    //Fecha:    07/04/2005
+        //    //Autor:    Samuel Dueñas
+        //    //Modificación:
+        //    //Fecha de Modificacion:
+        //    //_______________________________________________________________
+        //    //Descripción:
+        //    //       Regresa el Nombre de un archivo escrito por el usuario.
+        //    //_______________________________________________________________
+        //    // hace falta implementar esta funcion
+        //    // 19 mayo 2023
+        //    // RGB
+        //    //    public Function ObtenNombreArchivo(Extension As String, Titulo As String, Optional InitDir As String, Optional OverwritePrompt As Boolean = True, Optional Name As String) As String
+        //    //        On Error GoTo fin
+
+        //    //        ObtenNombreArchivo = Empty
+        //    //        Extension = Replace(Extension, ".", "")
+        //    //        With frmRentas.Dialog
+        //    //            .Filter = "Archivos de Tipo " & Extension & "|*." & Extension & "|Todos los Archivos|*.*"
+        //    //            .CancelError = True
+        //    //            .DialogTitle = Titulo
+        //    //            .DefaultExt = Extension
+        //    //            .InitDir = InitDir
+        //    //            .Flags = cdlOFNPathMustExist
+        //    //            //I Héctor García  18ene2012 Optimizar Proceso de Comisiones
+        //    //            .FileName = Name
+        //    //            //F Héctor García  18ene2012 Optimizar Proceso de Comisiones
+        //    //            if OverwritePrompt Then
+        //    //                .Flags = cdlOFNOverwritePrompt
+        //    //                .ShowSave
+        //    //            else
+        //    //                .ShowOpen
+        //    //            End if
+
+        //    //            if .FileName = "" Then
+        //    //                ObtenNombreArchivo = Empty
+        //    //            else
+        //    //                ObtenNombreArchivo = .FileName
+        //    //            End if
+        //    //        End With
+        //    //fin:
+        //    //    End Function
+
+        //    //_______________________________________________________________
+        //    //Título: Generar archivo separado por comas de un recordset
+        //    //Subrutina: GeneraReporte
+        //    //Versión: 1.0
+        //    //Fecha:    02/08/2005
+        //    //Autor:    Samuel Dueñas
+        //    //Modificación:
+        //    //Fecha de Modificacion:
+        //    //_______________________________________________________________
+        //    //Descripción:
+        //    //       Crea un archivo separado por comas para ser abierto en excel.
+        //    //   Se puede usar también para generar TXT del estilo del IMSS.
+        //    //_______________________________________________________________
+
+        //    public Sub GeneraCSV(ByRef rsData As Recordset, ByRef sNombreArchivo As String, bTitulos As Boolean, Optional bMensaje As Boolean = True)
+        //        Dim nCanal As Integer
+        //        Dim sCadena As String
+        //        Dim X As Integer
+
+        //        nCanal = FreeFile()
+        //        On Error Resume Next
+        //        FileOpen(1, sNombreArchivo, OpenMode.Output)
+        //        if Err().Number!= 0 Then
+        //            gfMsgbox.Mensaje("Imposible abrir el Archivo para escritura.", vbInformation, gsModulo)
+        //            Exit Sub
+        //        End if
+
+        //        rsData.MoveFirst()
+
+        //        if Not rsData.EOF Then
+        //            sCadena = ""
+
+        //            if bTitulos Then
+        //                For X = 0 To rsData.Fields.Count - 1
+        //                    sCadena = sCadena & Chr(34) & rsData(X).Name & Chr(34) & ","
+        //                Next
+        //                Print(1, sCadena)
+        //            End if
+
+        //            While Not rsData.EOF
+        //                sCadena = ""
+        //                For X = 0 To rsData.Fields.Count - 1
+        //                    sCadena = sCadena + rsData(X).Value + Iif(rsData.Fields.Count = 1, "", ",")
+        //                Next
+        //                Print(1, sCadena)
+        //                rsData.MoveNext()
+        //            End While
+        //            if bMensaje Then
+        //                gfMsgbox.Mensaje("Archivo generado exitosamente en " & sNombreArchivo, vbInformation, gsModulo)
+        //            End if
+        //        End if
+
+        //        FileClose(1)
+        //        On Error GoTo 0
+
+        //    End Sub
+
+        //    public Function dMaximo(ByRef dUno As Double, ByRef dDos As Double) As Double
+        //        if dUno > dDos Then
+        //            dMaximo = dUno
+        //        else
+        //            dMaximo = dDos
+        //        End if
+        //    End Function
+
+        //    public Function iMaximo(ByRef iUno As Integer, ByRef iDos As Integer) As Integer
+        //        if iUno > iDos Then
+        //            iMaximo = iUno
+        //        else
+        //            iMaximo = iDos
+        //        End if
+        //    End Function
+
+        //    //_______________________________________________________________
+        //    //Título: Generar archivo de Excel a partir de un recordset
+        //    //Subrutina: GeneraXLS
+        //    //Versión: 1.0
+        //    //Fecha:    2007-06-15
+        //    //Autor:    Samuel Dueñas
+        //    //Modificación:
+        //    //Fecha de Modificacion:
+        //    //_______________________________________________________________
+        //    //Descripción:
+        //    //   Crea un archivo de Excel con los mismos parametros de entrada
+        //    //   que la funcion GeneraCSV. Pueden ser intercambiables, sin embargo,
+        //    //   esta función es muy lenta.
+        //    //_______________________________________________________________
+        //    public Sub GeneraXLS(ByRef rsData As Recordset, ByRef sNombreArchivo As String, bTitulos As Boolean, Optional bMensaje As Boolean = True)
+        //        Dim objXcel As Excel.Worksheet
+        //        Dim AppExcel As Excel.Application
+        //        Dim lRow As Long
+        //        Dim iCol As Integer
+        //        Dim lTotal As Long
+        //        On Error GoTo msgerror
+
+        //        //Screen.MousePointer = vbHourglass
+
+        //        lRow = 1
+        //        iCol = 1
+
+        //        rsData.MoveFirst()
+
+        //        if Not rsData.EOF Then
+        //            lTotal = rsData.RecordCount
+
+        //            if lTotal > 65535 Then
+        //                gfMsgbox.Mensaje("No se puede guardar a Excel, más de 65535 registros.", vbExclamation, "CAIRO")
+        //                Exit Sub
+        //            End if
+
+        //            AppExcel = New Excel.Application
+        //            AppExcel.Workbooks.Add()
+        //            objXcel = AppExcel.Worksheets(1)
+
+        //            if bTitulos Then
+        //                For iCol = 1 To rsData.Fields.Count
+        //                    objXcel.Cells(lRow, iCol).Font.Bold = True
+        //                    objXcel.Cells(lRow, iCol) = rsData(iCol - 1).Name
+        //                Next
+        //                lRow = lRow + 1
+        //            End if
+
+        //            While Not rsData.EOF
+        //                For iCol = 1 To rsData.Fields.Count
+        //                    //Se agrega el if para evaluar si la celda es de tipo fecha Reporte Prescripcion Version 2 EBS 01/JULIO/2016
+        //                    if IsDate(rsData(iCol - 1)) And InStr(1, sNombreArchivo, "PrescPolGpo", vbTextCompare) != 0 Then
+        //                        objXcel.Cells(lRow, iCol) = FormatDateTime(rsData(iCol - 1).Value, vbShortDate)
+        //                    else
+        //                        //-- Inicio Reporte Saldo Vivienda EBS 08/MARZO/2017 -------------------------------------------------------------------
+        //                        if rsData(iCol - 1).Name!= "Poliza" And IsNumeric(rsData(iCol - 1)) And InStr(1, sNombreArchivo, "SaldoVivienda", vbTextCompare) != 0 Then
+        //                            objXcel.Cells(lRow, iCol) = FormatCurrency(rsData(iCol - 1), 2, vbFalse, vbFalse, vbTrue)
+        //                        else
+        //                            //-- Fin Reporte Saldo Vivienda EBS 08/MARZO/2017 -------------------------------------------------------------------
+        //                            objXcel.Cells(lRow, iCol) = rsData(iCol - 1) //<-- esta linea ya existia EBS 01/JULIO/2016
+        //                        End if
+        //                    End if
+        //                Next
+        //                rsData.MoveNext()
+        //                //SetStatusBar("Exportando a Excel registro " & lRow - 1 & " de " & lTotal & " ...")
+        //                lRow = lRow + 1
+        //            End While
+
+        //            AppExcel.Workbooks(1).SaveAs(sNombreArchivo)
+        //            AppExcel.Workbooks.Close()
+        //            AppExcel.DisplayAlerts = True
+        //            AppExcel.Quit()
+        //            AppExcel = Nothing
+
+        //            if bMensaje Then
+        //                gfMsgbox.Mensaje("Archivo generado exitosamente en " & sNombreArchivo, vbInformation, "CAIRO")
+        //            End if
+        //        End if
+
+        //        //Screen.MousePointer = vbDefault
+        //        Exit Sub
+        //msgerror:
+        //        //Screen.MousePointer = vbDefault
+        //        gsErrVB = Strings.Format$((Err.Number) & vbTab & Err.Source & vbTab & Err.Description)
+        //        gfMsgbox.Mensaje("Error del Sistema Cairo", frmMensaje.ETipos.vbOKDetails + vbCritical, "CAIRO", , gsErrVB)
+        //    End Sub
+
+
+        //    // ------------------------------------------------------------------
+        //    // Título:       Rutinas Generales de Prestamos ISSSTE
+        //    // Modulo:       modGeneral.bas
+        //    // Versión:      1.0
+        //    // Fecha:        19/Nov/2009
+        //    // Autor:        Silvia Gabriela Rodriguez Ruiz
+        //    // Modificación:
+        //    //
+        //    // ------------------------------------------------------------------
+        //    // Descripción:
+        //    // Este modulo provee rutinas más utilizadas en forma general,
+        //    // como son formatos de campos, obtención de datos, validaciones de
+        //    // datos.
+
+
+        //    public Function iUbicaElementoCombo(objCmb As Object, sClave As String) As Integer
+        //        // Función:  iUbicaElementoCombo
+        //        //
+        //        // Descripción:
+        //        //    Esta función obtiene la posición de un dato especifico, en un combo.
+        //        //
+        //        // Uso:
+        //        //    cboLista.ListIndex = iUbicaElementoCombo(cboLista, "Elemento 5")
+        //        //
+        //        // Fecha: 19/Nov/2009
+        //        // Autor: Silvia Gabriela Rodriguez Ruiz
+
+        //        Dim iIndex As Integer
+        //        Dim iPosicion As Integer
+        //        Dim sError As String
+
+        //        On Error GoTo iUbicaElementoCombo_Err
+
+        //        iPosicion = -1
+        //        iIndex = 0
+        //        While iIndex<objCmb.ListCount And iPosicion = -1
+        //            objCmb.ListIndex = iIndex
+        //            if Mid(objCmb.Text, 1, Len(sClave)) = sClave Then
+        //                iPosicion = iIndex
+        //            End if
+        //            iIndex = iIndex + 1
+        //        End While
+
+        //iUbicaElementoCombo_Sal:
+        //        iUbicaElementoCombo = iPosicion
+        //        Exit Function
+
+        //iUbicaElementoCombo_Err:
+        //        iPosicion = -1
+        //        sError = Err.Number & " " & Err.Description
+        //        Resume iUbicaElementoCombo_Sal
+
+        //    End Function
+
+        //    public Function OnlyNumbers(intAsc As Integer) As Byte
+        //        // Función:  OnlyNumbers
+        //        //
+        //        // Descripción:
+        //        //    Esta función solo valida que el caracter presionado
+        //        //    sea numerico.
+        //        //
+        //        // Uso:
+        //        //    KeyAscii = OnlyNumbers(Asc(UCase(Chr(KeyAscii))))
+        //        //
+        //        // Fecha: 19/Nov/2009
+        //        // Autor: Silvia Gabriela Rodriguez Ruiz
+
+        //        Dim bytAscci As Byte
+        //        On Error GoTo OnlyNumbers_Err
+
+        //        if(intAsc >= 48 And intAsc <= 57) Then
+        //            bytAscci = intAsc
+        //        else
+        //            if intAsc = 8 Then
+        //                bytAscci = intAsc
+        //            else
+        //                bytAscci = 0
+        //            End if
+        //        End if
+
+        //OnlyNumbers_Sal:
+        //        OnlyNumbers = bytAscci
+        //        Exit Function
+
+        //OnlyNumbers_Err:
+        //        bytAscci = 0
+        //        Resume OnlyNumbers_Sal
+
+        //    End Function
+
+        //    public Function CaracterInvalido(intAsc As Integer) As Byte
+        //        // Función:  OnlyNumbers
+        //        //
+        //        // Descripción:
+        //        //    Funcion que permite limitar los caracteres que pueden ser tecleados en un text box, esta funcion
+        //        //    no permite la captura de caracteres como ", `, // # , no se permite que se capturen estos caracteres
+        //        //    ya que confunden la información con el uso de querys.
+        //        //
+        //        // Uso:
+        //        //    KeyAscii = OnlyNumbers(Asc(UCase(Chr(KeyAscii))))
+        //        //
+        //        // Fecha: 19/Nov/2009
+        //        // Autor: Silvia Gabriela Rodriguez Ruiz
+
+        //        // Objetivo:
+        //        Dim bytAscci As Byte
+        //        On Error GoTo CaracterInvalido_Err
+
+        //        if(intAsc >= 32 And intAsc <= 125) Or
+        //       (intAsc = 8) Or
+        //       (intAsc = 3) Or
+        //       (intAsc = 22) Or
+        //       (intAsc = Asc(vbCrLf)) Or
+        //        (intAsc = Asc(vbCr)) Then
+        //            if intAsc = 34 Or intAsc = 39 Or intAsc = 96 Or intAsc = 44 Then
+        //                bytAscci = 0
+        //            else
+        //                bytAscci = intAsc
+        //            End if
+        //        else
+        //            if intAsc = 193 Or intAsc = 201 Or intAsc = 205 Or
+        //           intAsc = 211 Or intAsc = 218 Or intAsc = 225 Or
+        //           intAsc = 233 Or intAsc = 237 Or intAsc = 243 Or
+        //           intAsc = 250 Then
+        //                bytAscci = intAsc
+        //            End if
+        //        End if
+
+        //CaracterInvalido_Sal:
+        //        CaracterInvalido = bytAscci
+        //        Exit Function
+
+        //CaracterInvalido_Err:
+        //        bytAscci = 0
+        //        Resume CaracterInvalido_Sal
+        //    End Function
+
+        //    //02 de marzo 2011 RCS
+        //    //se encarga de eliminar los campos repetidos en un rs
+
+        //    public Function quitaCamposRepetidos(ByVal objRecordset As Recordset, Optional ByVal LockType As LockTypeenum = adLockBatchOptimistic, Optional ByVal CursorType As CursorTypeenum = adOpenDynamic) As Recordset
+        //        On Error GoTo msgerror
+        //        Dim objNewRS As ADODB.Recordset
+        //        Dim objField As Object
+        //        Dim objField1 As Object
+
+        //        Dim lngCnt As Long
+        //        Dim errVB As String
+
+        //        objNewRS = New ADODB.Recordset
+        //        objNewRS.CursorLocation = adUseClient
+        //        objNewRS.LockType = LockType
+        //        objNewRS.CursorType = CursorType
+
+        //        Dim i, conta, Contador As Integer
+        //        conta = 1
+
+        //        Dim nameStr As String
+        //        Dim typeSTR As String
+        //        Dim sizeStr As String
+        //        Dim attrib As String
+
+        //        Dim camposNoRepetidos() As String
+        //        Dim typeMATRIZ() As String
+        //        Dim sizeMATRIZ() As String
+        //        Dim attribMATRIZ() As String
+
+        //        i = 0
+        //        For Each objField In objRecordset.Fields
+
+        //            Contador = 1
+        //            For Each objField1 In objRecordset.Fields
+        //                if objField1.Name = objField.Name Then
+        //                    if Contador = 1 Then
+        //                        if InStr(nameStr, objField.Name) < 1 Then
+        //                            nameStr = nameStr & "," & objField.Name
+        //                            sizeStr = sizeStr & "," & objField.DefinedSize
+        //                            typeSTR = typeSTR & "," & objField.Type
+        //                            attrib = attrib & "," & objField.Attributes
+        //                        End if
+        //                    End if
+        //                    Contador = Contador + 1
+        //                End if
+        //            Next objField1
+        //        Next objField
+
+        //        camposNoRepetidos = Split(nameStr, ",")
+        //        typeMATRIZ = Split(typeSTR, ",")
+        //        sizeMATRIZ = Split(sizeStr, ",")
+        //        attribMATRIZ = Split(attrib, ",")
+
+        //        For i = 1 To UBound(camposNoRepetidos)
+        //            objNewRS.Fields.Append(camposNoRepetidos(i), typeMATRIZ(i), sizeMATRIZ(i), attribMATRIZ(i))
+        //        Next i
+
+        //        objNewRS.Open()
+
+        //        if Not objRecordset.RecordCount = 0 Then
+        //            objRecordset.MoveFirst()
+
+        //            While Not objRecordset.EOF
+        //                objNewRS.AddNew()
+
+        //                For lngCnt = 0 To UBound(camposNoRepetidos) - 1
+        //                    objNewRS.Fields(lngCnt).Value = objRecordset.Fields(camposNoRepetidos(lngCnt + 1)).Value
+        //                Next lngCnt
+        //                objRecordset.MoveNext()
+        //            End While
+        //        End if
+        //        quitaCamposRepetidos = objNewRS
+
+        //        Exit Function
+
+        //msgerror:
+        //        //Screen.MousePointer = vbDefault
+        //        errVB = Strings.Format$((Err.Number) & vbTab & Err.Source & vbTab & Err.Description)
+        //        gfMsgbox.Mensaje(" Error del Sistema Prospect ", frmMensaje.ETipos.vbOKDetails + vbCritical, "P R O S P E C T", , errVB)
+        //    End Function
+        //    public Function FindeMes(sMonth As String, sYear As String) As String
+
+        //        Select Case sMonth
+        //            Case Is = "01", "03", "05", "07", "08", "10", "12"
+        //                FindeMes = "31"
+        //            Case Is = "04", "06", "09", "11"
+        //                FindeMes = "30"
+        //            Case Is = "02"
+        //                if Int(sYear / 4) = sYear / 4 Then
+        //                    FindeMes = "29"
+        //                else
+        //                    FindeMes = "28"
+        //                End if
+        //        End Select
+
+        //    End Function
+
+
+        //    //Inicio. Alexander Hdez 12/06/2012 Codigos Postales YA9A0F
+        //    //----------------------------------------------------------------------------------------//
+        //    //------------------   Funcion de validacion de entrada de datos, acepta lo que le llegue en ValidString   ----------------------//
+        //    //----------------------------------------------------------------------------------------//
+        //    Function Valida_TextoMinMay(KeyIn As Integer, ValidString As String, Editable As Boolean) As Integer
+        //        Dim ValidList As String, KeyOut As Integer
+
+        //        ValidList = Iif(Editable, ValidString & Chr(8), ValidString)
+
+        //        if InStr(1, ValidList, Chr(KeyIn), 1) > 0 Then
+        //            KeyOut = Iif(Editable, KeyIn, 0)
+        //        else
+        //            KeyOut = Iif(Editable, 0, Chr(KeyIn))
+        //        End if
+
+        //        Valida_TextoMinMay = KeyOut
+        //    End Function
+
+
+        //    Function Valida_Texto(KeyIn As Integer, ValidString As String, Editable As Boolean) As Integer
+        //        Dim ValidList As String, KeyOut As Integer
+
+        //        ValidList = Iif(Editable, UCase(ValidString) & Chr(8), UCase(ValidString))
+
+        //        if InStr(1, ValidList, UCase(Chr(KeyIn)), 1) > 0 Then
+        //            KeyOut = Iif(Editable, Asc(UCase(Chr(KeyIn))), 0)
+        //        else
+        //            KeyOut = Iif(Editable, 0, Asc(UCase(Chr(KeyIn))))
+        //        End if
+
+        //        Valida_Texto = KeyOut
+        //    End Function
+        //    //Fin. Alexander Hdez 12/06/2012
+
+        //    //Inicio. Alexander Hdez 12/06/2012 Codigos Postales YA9A0F
+        //    //----------------------------------------------------------------------------------------//
+        //    //------------------   Funcion para Proceso de Codigos Postales  ----------------------//
+        //    //----------------------------------------------------------------------------------------//
+
+        //    public Function ExcelsePOMEX(rutaSEPOMEX As String)
+
+        //        Dim errVB As String
+        //        Dim Estados(33) As String
+        //        Dim TamMatriz As Integer
+        //        Dim i As Integer
+        //        Dim ArchivoE As String
+
+        //        Dim cnn As New ADODB.Connection
+        //        Dim cnConn As New ADODB.Connection
+        //        Dim lNumRegAfect As Long
+        //        Dim strSQL As String
+        //        Dim rs As New ADODB.Recordset
+        //        Dim j As Integer
+        //        Dim iCountCargaCP As Long
+
+        //        On Error GoTo msgerror
+
+        //        Dim ObjExcel As New Excel.Application
+        //        Dim ObjW As Object
+        //        ObjW = ObjExcel.Workbooks.Open(rutaSEPOMEX)
+
+
+        //        TamMatriz = ObjW.Sheets.Count
+
+        //        For i = 2 To ObjW.Sheets.Count
+        //            Estados(i) = ObjW.Sheets(i).Name
+        //        Next
+
+        //        ObjW.Close
+        //        ObjW = Nothing
+
+        //        cnConn.CommandTimeout = 0
+        //        cnConn.Open(gsConexion) //Conexion para Chairo
+
+        //        TamMatriz = UBound(Estados)
+
+        //        With cnn
+        //            .CommandTimeout = 0
+        //            .Provider = "Microsoft.Jet.OLEDB.4.0"
+        //            .ConnectionString = "Data Source=" & rutaSEPOMEX & " "
+        //            //.Properties("Extended Properties") = "Excel 8.0" //This is a read only properti
+        //            .Open()
+        //        End With
+
+        //        strSQL = ""
+        //        strSQL = strSQL & " Delete from Cat_Sepomex  "
+        //        cnConn.Execute(strSQL)
+
+        //        //frmCatCodigosPostales.pgbCargaCP.Visible = False
+
+        //        For j = 2 To TamMatriz //- 1
+        //            //frmCatCodigosPostales.pgbCargaCP.Value = 0
+        //            //iCountCargaCP = 1
+
+        //            strSQL = ""
+        //            strSQL = strSQL & "if  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N//[dbo].[TmpEstadoSEPOMEX]//) AND type in (N//U//)) "
+        //            strSQL = strSQL & "DROP TABLE [dbo].[TmpEstadoSEPOMEX] "
+        //            cnConn.Execute(strSQL)
+
+
+        //            strSQL = ""
+        //            strSQL = strSQL & "SELECT * INTO [ODBC;" & gsConexion & "].TmpEstadoSEPOMEX "
+        //            strSQL = strSQL & "FROM [" & Estados(j) & "] "
+        //            cnn.Execute(strSQL)
+
+
+        //            //    strSQL = ""
+        //            //    strSQL = "Select * from TmpEstadoSEPOMEX"
+        //            //
+        //            //    With rs
+        //            //        .ActiveConnection = cnConn
+        //            //        .CursorType = adOpenDynamic
+        //            //        .CursorLocation = adUseClient
+        //            //        .Open strSQL
+        //            //    End With
+        //            //
+        //            //    frmCatCodigosPostales.pgbCargaCP.Max = rs.RecordCount
+        //            //
+        //            //    if Not rs.EOF Then
+        //            //        rs.MoveFirst
+        //            //        Do While Not rs.EOF
+        //            //            strSQL = ""
+        //            //            strSQL = strSQL & "Insert Into Cat_Sepomex(d_codigo,d_asenta,d_tipo_asenta,D_mnpio,d_estado,d_ciudad,d_CP,c_estado,c_oficina,c_CP,c_tipo_asenta,c_mnpio,id_asenta_cpcons,d_zona,c_cve_ciudad) "
+        //            //            strSQL = strSQL & "Values(//" & rs.Fields("d_codigo") & "//,//" & rs.Fields("d_asenta") & "//,//" & rs.Fields("d_tipo_asenta") & "//,//" & rs.Fields("D_mnpio") & "//,//" & rs.Fields("d_estado") & "//,//" & rs.Fields("d_ciudad") & "//,//" & rs.Fields("d_CP") & "//,//" & rs.Fields("c_estado") & "//,//" & rs.Fields("c_oficina") & "//,//" & rs.Fields("c_CP") & "//,//" & rs.Fields("c_tipo_asenta") & "//,//" & rs.Fields("c_mnpio") & "//,//" & rs.Fields("id_asenta_cpcons") & "//,//" & rs.Fields("d_zona") & "//,//" & rs.Fields("c_cve_ciudad") & "//)"
+        //            //            cnConn.Execute (strSQL)
+        //            //            rs.MoveNext
+        //            //
+        //            //            frmCatCodigosPostales.pgbCargaCP.Value = iCountCargaCP
+        //            //            iCountCargaCP = iCountCargaCP + 1
+        //            //
+        //            //        Loop
+        //            //        rs.Close
+        //            //    End if
+        //            strSQL = ""
+        //            strSQL = strSQL & "Insert Into Cat_Sepomex(d_codigo,d_asenta,d_tipo_asenta,D_mnpio,d_estado,d_ciudad,d_CP,c_estado,c_oficina,c_CP,c_tipo_asenta,c_mnpio,id_asenta_cpcons,d_zona,c_cve_ciudad) "
+        //            strSQL = strSQL & "Select * from TmpEstadoSEPOMEX "
+        //            cnConn.Execute(strSQL)
+
+        //        Next
+
+
+
+        //        strSQL = ""
+        //        strSQL = strSQL & " exec sp_ActualizaAcentosSEPOMEX "
+        //        cnConn.Execute(strSQL)
+
+        //        strSQL = ""
+        //        strSQL = strSQL & " exec sp_InsertColSEPOMEXvsCAIRO "
+        //        cnConn.Execute(strSQL)
+
+
+        //        rs = Nothing
+        //        cnConn.Close()
+        //        cnConn = Nothing
+
+
+        //        Exit Function
+        //msgerror:
+        //        errVB = Strings.Format((Err.Number) & vbTab & Err.Source & vbTab & Err.Description)
+        //        //Set rsErrAdo = ErroresDLL(Nothing, errVB)
+
+        //    End Function
+        //    //Fin. Alexander Hdez 12/06/2012
+
+
+
+
+        //    //Inicio. Alexander Hdez 22/10/2012 Codigos Postales YA9A0F
+        //    //----------------------------------------------------------------------------------------//
+        //    //------------------   Funcion para Proceso de Codigos Postales, valida Email  ----------------------//
+        //    //----------------------------------------------------------------------------------------//
+
+        //    public Function Validar_Email(ByVal Email As String) As Boolean
+
+        //        Dim i As Integer, iLen As Integer, caracter As String
+        //        Dim pos As Integer, bp As Boolean, ipos As Integer, iPos2 As Integer
+
+        //        On Error GoTo Err_Sub
+
+        //        Email = Trim$(Email)
+
+        //        if Email = vbNullString Then
+        //            Exit Function
+        //        End if
+
+        //        Email = LCase$(Email)
+        //        iLen = Len(Email)
+
+
+        //        For i = 1 To iLen
+        //            caracter = Mid(Email, i, 1)
+
+        //            if(Not (caracter Like "[a-z]")) And(Not (caracter Like "[0-9]")) Then
+
+        //                if InStr(1, "_-" & "." & "@", caracter) > 0 Then
+        //                    if bp = True Then
+        //                        Exit Function
+        //                    else
+        //                        bp = True
+
+        //                        if i = 1 Or i = iLen Then
+        //                            Exit Function
+        //                        End if
+
+        //                        if caracter = "@" Then
+        //                            if ipos = 0 Then
+        //                                ipos = i
+        //                            else
+
+        //                                Exit Function
+        //                            End if
+        //                        End if
+        //                        if caracter = "." Then
+        //                            iPos2 = i
+        //                        End if
+
+        //                    End if
+        //                else
+
+        //                    Exit Function
+        //                End if
+        //            else
+        //                bp = False
+        //            End if
+        //        Next i
+        //        if ipos = 0 Or iPos2 = 0 Then
+        //            Exit Function
+        //        End if
+
+        //        if iPos2<ipos Then
+        //            Exit Function
+        //        End if
+
+
+        //        Validar_Email = True
+
+        //        Exit Function
+        //Err_Sub:
+        //        On Error Resume Next
+
+        //        Validar_Email = False
+        //    End Function
+        //    //Fin. Alexander Hdez 22/10/2012
+
+
+        //    //Alexander Hdez 2014-01-08, funcion que desabilita el menu contextuald e la cuenta de titulares
+        //    //Inicio
+        //    //Comienza el Hook
+
+        //    // hace falta implementar esta funcion
+        //    // 19 mayo 2023
+        //    // RGB
+        //    //public Sub Hook(Handle As Long)
+        //    //    lpPrevWndProc = SetWindowLong(Handle, -4, AddressOf WinProc)
+        //    //End Sub
+
+        //    //Termina el Hook
+        //    public Sub Unhook(Handle As Long)
+        //        Call SetWindowLong(Handle, -4, lpPrevWndProc)
+        //    End Sub
+
+        //    //Procedimiento chequea los mensajes que llegan _
+        //    //para ver si se despliega el menú contextual _
+        //    //en el textbox indicado
+        //    //Private ReadOnly DatosOK As Integer
+        //    //Private ReadOnly NoHayDatos As Integer
+        //    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //    public Function WinProc(ByVal hwnd As Long,
+        //                            ByVal Msg As Long,
+        //                            ByVal wParam As Long,
+        //                            ByVal lParam As Long) As Long
+        //        // Chequea si el mensaje  es WM_CONTEXTMENU ( el menú contextual )
+        //        if Msg = WM_CONTEXTMENU Then
+        //            WinProc = True
+        //        else
+        //            WinProc = CallWindowProc(lpPrevWndProc,
+        //                              hwnd, Msg, wParam, lParam)
+        //        End if
+        //    End Function
+        //    //Fin Alexander Hdez 2014-01-08
+
+        //    // Proyecto: México - Migrar Obsolescencia de BD Oracle Auditoría KPMG
+        //    // Juan Martínez Díaz
+        //    // 2022-11-23
+        //    public Sub prObtieneConexionBase2019()
+        //        vgNombre_ini = "c:\Cairo\Cairo2000.ini"
+        //        if ExistFile(vgNombre_ini) Then
+        //            ReadINI(vgNombre_ini, "SERVIDOR_2", "Servidor", gsServidor)
+        //            ReadINI(vgNombre_ini, "ODBC_2", "DSN", gsDSN)
+        //            ReadINI(vgNombre_ini, "USUARIO_2", "UID", gsUsrBD)
+        //            ReadINI(vgNombre_ini, "PASSWORD_2", "PWD", gsPwdBD)
+        //            // variables de .Net
+        //            ReadINI(vgNombre_ini, "ODBC_NETCRYSTAL_2", "DSN", gsDSN_NetCrystal)
+        //            ReadINI(vgNombre_ini, "SERVIDOR_NET_2", "Servidor", gsServidor_Net)
+        //            ReadINI(vgNombre_ini, "ODBC_NET_2", "DSN", gsDSN_Net)
+        //            ReadINI(vgNombre_ini, "USUARIO_NET_2", "UID", gsUsrBD_Net)
+        //            ReadINI(vgNombre_ini, "PASSWORD_NET_2", "PWD", gsPwdBD_Net)
+
+        //            ReadINI(vgNombre_ini, "SERVIDORMTS_2", "Servidormts", gsServidorMTS)
+        //        End if
+        //    End Sub
+
+        //    // Proyecto: México - Migrar Obsolescencia de BD Oracle Auditoría KPMG
+        //    // Juan Martínez Díaz
+        //    // 2022-11-23
+        //    public Sub prObtieneConexionBase2019Dualidad(ByRef prgsServidor As String, ByRef prgsDSN As String, ByRef prgsUsrBD As String, ByRef prgsPwdBD As String)
+        //        vgNombre_ini = "c:\Cairo\Cairo2000.ini"
+        //        if ExistFile(vgNombre_ini) Then
+        //            ReadINI(vgNombre_ini, "SERVIDOR_2", "Servidor", prgsServidor)
+        //            ReadINI(vgNombre_ini, "ODBC_2", "DSN", prgsDSN)
+        //            ReadINI(vgNombre_ini, "USUARIO_2", "UID", prgsUsrBD)
+        //            ReadINI(vgNombre_ini, "PASSWORD_2", "PWD", prgsPwdBD)
+        //        End if
+        //    End Sub
+
+
 
     }
 }

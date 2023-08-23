@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33927.249
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bbva_cairo", "bbva_cairo\bbva_cairo.csproj", "{2A5BA71D-A31B-462E-AE94-4B2AFFB9F76A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bbva_cairo", "bbva_cairo\bbva_cairo.csproj", "{2A5BA71D-A31B-462E-AE94-4B2AFFB9F76A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTSCPolizas", "MTSCPolizas\MTSCPolizas.csproj", "{0435E6FA-3BCC-49CF-8F05-D20385EB1A42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MTSCPolizas", "MTSCPolizas\MTSCPolizas.csproj", "{0435E6FA-3BCC-49CF-8F05-D20385EB1A42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTSCSeguridad", "MTSCSeguridad\MTSCSeguridad.csproj", "{D1504C90-BFE8-4603-BE67-06BA44FE813E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MTSCSeguridad", "MTSCSeguridad\MTSCSeguridad.csproj", "{D1504C90-BFE8-4603-BE67-06BA44FE813E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTSResolucion", "MTSResolucion\MTSResolucion.csproj", "{5B8449E1-7CB4-415B-B9A1-9437DA1C59DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MTSResolucion", "MTSResolucion\MTSResolucion.csproj", "{5B8449E1-7CB4-415B-B9A1-9437DA1C59DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTSEndososCET", "MTSEndososCET\MTSEndososCET.csproj", "{304EC8D7-B2C2-4AAF-825D-6942C0F2E9DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{5B8449E1-7CB4-415B-B9A1-9437DA1C59DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B8449E1-7CB4-415B-B9A1-9437DA1C59DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B8449E1-7CB4-415B-B9A1-9437DA1C59DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{304EC8D7-B2C2-4AAF-825D-6942C0F2E9DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{304EC8D7-B2C2-4AAF-825D-6942C0F2E9DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{304EC8D7-B2C2-4AAF-825D-6942C0F2E9DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{304EC8D7-B2C2-4AAF-825D-6942C0F2E9DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
