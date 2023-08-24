@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCISSSTE));
             toolStrip1 = new ToolStrip();
             toolStripButton1 = new ToolStripButton();
             groupBox1 = new GroupBox();
@@ -88,9 +89,12 @@
             // 
             // grdDescXPtmos
             // 
+            grdDescXPtmos.AllowUserToAddRows = false;
+            grdDescXPtmos.BorderStyle = BorderStyle.Fixed3D;
             grdDescXPtmos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             grdDescXPtmos.Location = new Point(6, 348);
             grdDescXPtmos.Name = "grdDescXPtmos";
+            grdDescXPtmos.ReadOnly = true;
             grdDescXPtmos.RowTemplate.Height = 25;
             grdDescXPtmos.Size = new Size(776, 272);
             grdDescXPtmos.TabIndex = 2;
@@ -231,9 +235,12 @@
             // 
             // grdPtmosActivos
             // 
+            grdPtmosActivos.AllowUserToAddRows = false;
+            grdPtmosActivos.BorderStyle = BorderStyle.Fixed3D;
             grdPtmosActivos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             grdPtmosActivos.Location = new Point(6, 12);
             grdPtmosActivos.Name = "grdPtmosActivos";
+            grdPtmosActivos.ReadOnly = true;
             grdPtmosActivos.RowTemplate.Height = 25;
             grdPtmosActivos.Size = new Size(776, 182);
             grdPtmosActivos.TabIndex = 0;
@@ -245,6 +252,7 @@
             ClientSize = new Size(800, 666);
             Controls.Add(groupBox1);
             Controls.Add(toolStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "frmCISSSTE";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CAIRO - PRÉSTAMOS ISSSTE";

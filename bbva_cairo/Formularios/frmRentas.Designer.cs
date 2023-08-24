@@ -28,11 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmRentas));
             menuStrip1 = new MenuStrip();
             prestamoISSSTEToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripMenuItem();
+            salirToolStripMenuItem = new ToolStripMenuItem();
             toolStrip1 = new ToolStrip();
             toolStripButton1 = new ToolStripButton();
+            toolStripButton2 = new ToolStripButton();
             statusStrip1 = new StatusStrip();
             statusLabel = new ToolStripStatusLabel();
             menuStrip1.SuspendLayout();
@@ -42,7 +45,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { prestamoISSSTEToolStripMenuItem, toolStripMenuItem1 });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { prestamoISSSTEToolStripMenuItem, toolStripMenuItem1, salirToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(878, 24);
@@ -62,24 +65,43 @@
             toolStripMenuItem1.Size = new Size(72, 20);
             toolStripMenuItem1.Text = "Ca&tálogos";
             // 
+            // salirToolStripMenuItem
+            // 
+            salirToolStripMenuItem.Name = "salirToolStripMenuItem";
+            salirToolStripMenuItem.Size = new Size(41, 20);
+            salirToolStripMenuItem.Text = "&Salir";
+            salirToolStripMenuItem.Click += salirToolStripMenuItem_Click;
+            // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton1 });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2 });
             toolStrip1.Location = new Point(0, 24);
             toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(878, 39);
+            toolStrip1.Size = new Size(878, 43);
             toolStrip1.TabIndex = 2;
             toolStrip1.Text = "toolStrip1";
             // 
             // toolStripButton1
             // 
-            toolStripButton1.AutoSize = false;
             toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton1.Image = Properties.Resources.icons8_insurance_64;
+            toolStripButton1.Image = Properties.Resources.icons8_money_36;
+            toolStripButton1.ImageScaling = ToolStripItemImageScaling.None;
             toolStripButton1.ImageTransparentColor = Color.Magenta;
             toolStripButton1.Name = "toolStripButton1";
-            toolStripButton1.Size = new Size(36, 36);
+            toolStripButton1.Size = new Size(40, 40);
             toolStripButton1.Text = "toolStripButton1";
+            toolStripButton1.Click += toolStripButton1_Click;
+            // 
+            // toolStripButton2
+            // 
+            toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton2.Image = Properties.Resources.icons8_exit_36__1_;
+            toolStripButton2.ImageScaling = ToolStripItemImageScaling.None;
+            toolStripButton2.ImageTransparentColor = Color.Magenta;
+            toolStripButton2.Name = "toolStripButton2";
+            toolStripButton2.Size = new Size(40, 40);
+            toolStripButton2.Text = "toolStripButton2";
+            toolStripButton2.Click += toolStripButton2_Click;
             // 
             // statusStrip1
             // 
@@ -107,10 +129,11 @@
             Controls.Add(statusStrip1);
             Controls.Add(toolStrip1);
             Controls.Add(menuStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             IsMdiContainer = true;
             MainMenuStrip = menuStrip1;
             Name = "frmRentas";
-            Text = "frmRentas";
+            Text = "Sistema Administrador de Seguros de Pensiones";
             WindowState = FormWindowState.Maximized;
             Load += frmRentas_Load;
             menuStrip1.ResumeLayout(false);
@@ -132,5 +155,7 @@
         private ToolStripButton toolStripButton1;
         private StatusStrip statusStrip1;
         protected ToolStripStatusLabel statusLabel;
+        private ToolStripMenuItem salirToolStripMenuItem;
+        private ToolStripButton toolStripButton2;
     }
 }

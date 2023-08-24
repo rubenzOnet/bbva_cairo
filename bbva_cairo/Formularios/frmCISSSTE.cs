@@ -77,10 +77,11 @@ namespace bbva_cairo.Formularios
                 //DataAd.Fill(dt, RsPrestamos);
 
                 grdPtmosActivos.DataSource = dt.DefaultView;
+                grdPtmosActivos.Columns[0].Visible = false;
 
                 //grdPtmosActivos.Caption = "Prestamos ISSSTE y FOVISSSTE (" & dt.DefaultView.Count & ")"
                 GetDetalleISS(iPolizaPrest, Convert.ToDouble(RsPrestamos.Fields["ID_Prestamo"].Value), RsPrestamos.Fields["Prestamo"].Value, RsPrestamos.Fields["Tpo_Ptmo"].Value); //Alexander Hdez 01/10/2012 Agregue Prestamos FOVISSSTE
-                
+
                 //GetDetalleISS(iPolizaPrest, ID_Prestamo, Prestamo, Tpo_Ptmo); //Alexander Hdez 01/10/2012 Agregue Prestamos FOVISSSTE
                 // grdDescXPtmos.Caption = "Descuentos Aplicados al Préstamo: " & RsPrestamos.Fields("No_Prestamo").Value
             }
