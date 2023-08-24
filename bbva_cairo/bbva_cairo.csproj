@@ -6,20 +6,50 @@
     <Nullable>disable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <StartupObject>bbva_cairo.Program</StartupObject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <COMReference Include="ADODB">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>6</VersionMajor>
+      <Guid>b691e011-1797-432e-907a-4d8c69339129</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MTSCPolizas\MTSCPolizas.csproj" />
+    <ProjectReference Include="..\MTSEndososCET\MTSEndososCET.csproj" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Resources\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MTSEndososCET\MTSEndososCET.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="ADODB">
-      <HintPath>..\..\..\..\NewCode\Cairo\VS2022\ConsultaPolizas\packages\ADODB.7.10.3077\lib\adodb.dll</HintPath>
-    </Reference>
+    <PackageReference Include="System.Data.OleDb" Version="7.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Security.AccessControl;
-using System.Xml.Linq;
-using ADODB;
-
+﻿using ADODB;
+using MTSEndososCET.Modulos;
 
 namespace MTSEndososCET.Classes
 {
