@@ -216,7 +216,7 @@ namespace MTSCPolizas.Modulos
                                     sSql = sSql + sNull + ",";
                                 else
                                     sSql = sSql + SQLString(vParams.ToString()) + ",";
-        ¿                           break;
+                                   break;
                         }
                     }
 
