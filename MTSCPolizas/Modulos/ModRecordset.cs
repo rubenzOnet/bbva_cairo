@@ -1,5 +1,7 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using ADODB;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MTSCPolizas.Modulos
 {
@@ -41,7 +43,7 @@ namespace MTSCPolizas.Modulos
         public const string gsINGLESA = "mm/dd/yyyy";   //Fecha en formato Inglesa para los Componentes MTS
         public const string gsFRANCESA = "dd/mmm/yyyy"; //Fecha en formato Francesa para los Componentes MTS
 
-        private static Connection cnnCn = null;       //Variable de Conexión
+        private static Connection cnnCn;       //Variable de Conexión
 
 
         public static string SQLString(string strColumna)
@@ -128,7 +130,7 @@ namespace MTSCPolizas.Modulos
         public static DataTable ConvertRecordsetToDataTable(Recordset rs)
         {
             DataTable dataTable = new DataTable();
-            
+
             for (int i = 0; i < rs.Fields.Count; i++)
             {
                 dataTable.Columns.Add(rs.Fields[i].Name);
@@ -164,73 +166,84 @@ namespace MTSCPolizas.Modulos
         //    //Fecha :   13/Julio/2000
         //    //Autor :   Roberto Reyes I.
         //    //__________________________________________________________
+        public static bool Inserta(ref Recordset errAdo, ref string varDSN, object[] parametros)
+        {
+            object[] _params;
 
-        //    public Function Inserta(ByRef errAdo As ADODB.Recordset, ByRef varDSN As String, parametros As Object) As Boolean
-        //        Dim params As Object
+            try
+            {
+                // On Error GoTo msgerror
 
-        //        On Error GoTo msgerror
+                if (parametros.Length > 1)
+                {
+                    _params = parametros;
+                }
+                else
+                {
+                    if (parametros[0] is Array)
+                        _params = (object[])parametros[0];
+                    else
+                        _params = parametros;
+                }
 
-        //        If UBound(parametros) - LBound(parametros) > 1 Then
-        //            params = parametros
-        //        Else
-        //            If IsArray(parametros(0)) Then
-        //                params = parametros(0)
-        //            Else
-        //                params = parametros
-        //            End If
-        //        End If
+                cnnCn = new Connection();
+                cnnCn.Open(varDSN);
 
-        //        cnnCn = New ADODB.Connection
-        //        cnnCn.Open(varDSN)
+                sSql = "Insert into " + _params[0] + " Values(";
 
-        //        sSql = "Insert into " & params(0) & " Values("
-        //        iArrCount = 0
-        //        For Each vParams In params
-        //            If iArrCount<> 0 Then
-        //                Select Case VarType(vParams)
-        //                    Case 1  //Null
-        //                        sSql = sSql & vParams & ","
+                iArrCount = 0;
 
-        //                    Case 2  //Integer
-        //                        sSql = sSql & vParams & ","
+                foreach (var vParams in _params)
+                {
+                    if (iArrCount != 0)
+                    {
+                        switch (Type.GetTypeCode(vParams.GetType()))
+                        {
+                            case TypeCode.Int32:  //Integer
+                                sSql = sSql + vParams + ",";
+                                break;
+                            case TypeCode.Double: //Double
+                                sSql = sSql + vParams + ",";
+                                break;
+                            //case TypeCode.Double:  //Money
+                            //    sSql = sSql + vParams + ",";
+                            //    break;
+                            case TypeCode.DateTime: //Date
+                                sSql = sSql + "//" + string.Format("{0:mm/dd/yyyy}", vParams) + "//,";
+                                break;
+                            case TypeCode.String:  //String
+                                if (vParams == null)
+                                    sSql = sSql + sNull + ",";
+                                else
+                                    sSql = sSql + SQLString(vParams.ToString()) + ",";
+        ¿                           break;
+                        }
+                    }
 
-        //                    Case 5 //Double
-        //                        sSql = sSql & vParams & ","
+                    iArrCount = iArrCount + 1;
+                }
 
-        //                    Case 6  //Money
-        //                        sSql = sSql & vParams & ","
-        //                    Case 7 //Date
-        //                        sSql = sSql & "//" & String.Format(vParams, "mm/dd/yyyy") & "//,"
-        //                    Case 8  //String
-        //                        If vParams = sNull Then
-        //                            sSql = sSql & sNull & ","
-        //                        Else
-        //                            sSql = sSql & SQLString(vParams) & ","
-        //                        End If
+                sSql = sSql.Substring(1, sSql.Length - 1) + ")";
+                object recordAffected;
+                cnnCn.Execute(sSql, out recordAffected);
 
-        //                End Select
-        //            End If
-        //            iArrCount = iArrCount + 1
-        //        Next
+                cnnCn.Close();
 
-        //        sSql = Mid(sSql, 1, Len(sSql) - 1) & ")"
+                return true;
+                // Exit Function
 
-        //        cnnCn.Execute(sSql, 64)
+            }
+            catch (Exception Err)
+            {
+                //msgerror:
+                //Inserta = False
+                cnnCn.Close();
+                sErrVB = Err.Source + "\t" + Err.Message;
+                //errAdo = ErroresDLL(cnnCn, sErrVB)
+                return false;
+            }
 
-        //        cnnCn.Close()
-        //        cnnCn = Nothing
-        //        Inserta = True
-
-        //        Exit Function
-
-        //msgerror:
-        //        Inserta = False
-        //        cnnCn.Close()
-        //        cnnCn = Nothing
-        //        sErrVB = String.Format$(Err.Number) & vbTab & Err.Source & vbTab & Err.Description
-        //        errAdo = ErroresDLL(cnnCn, sErrVB)
-
-        //    End Function
+        }
 
         //    //__________________________________________________________
         //    //Descripción :
@@ -252,24 +265,29 @@ namespace MTSCPolizas.Modulos
         //    //Autor :   Roberto Reyes I.
         //    //__________________________________________________________
 
-        //    public Function ExecSPs(ByRef errAdo As ADODB.Recordset, ByRef varDSN As String, ByRef parametros As Object, ByRef AdoCmd As ADODB.Command, ByRef NumParamIn As Integer, ByRef NumParamOut As Integer) As Boolean
-        //        On Error GoTo msgerror
+        //public bool ExecSPs(ref Recordset errAdo, ref string varDSN, ref object[] parametros, ref Command AdoCmd, ref int NumParamIn, ref int NumParamOut)
+        //{
 
-        //        Dim blnFlag As Boolean
-        //        Dim ArrObject As Object
+        //    try
+        //    {
+        //        // On Error GoTo msgerror
+        //        bool blnFlag;
+        //        object[] ArrObject;
 
-        //        blnFlag = True // Para los parámetros de entrada
-        //        cnnCn = New ADODB.Connection
-        //        cnnCn.Open(varDSN)
+        //        blnFlag = true; // Para los parámetros de entrada
+        //        Connection cnnCn = new Connection();
+        //        cnnCn.Open(varDSN);
 
 
-        //        AdoCmd = New ADODB.Command
-        //        AdoCmd.ActiveConnection = cnnCn
-        //        AdoCmd.CommandType = adCmdStoredProc
-        //        AdoCmd.CommandText = parametros(0)
+        //        Command _AdoCmd = new Command();
+        //        AdoCmd.ActiveConnection = cnnCn;
+        //        AdoCmd.CommandType = CommandTypeEnum.adCmdStoredProc;
+        //        AdoCmd.CommandText = parametros[0].ToString();
 
-        //        For iArrCount = 1 To UBound(parametros)
-        //            ArrObject = parametros(iArrCount)
+
+        //        for (int i = 0; i < parametros.Length; i++)
+        //        {
+        //            ArrObject = parametros[iArrCount];
         //            Select Case VarType(ArrObject(0))
 
         //                Case 2  //Integer
@@ -302,17 +320,21 @@ namespace MTSCPolizas.Modulos
         //                            AdoCmd.Parameters.Append(AdoCmd.CreateParameter(ArrObject(1), adVarChar, adParamOutput, ArrObject(2)))
         //                    End Select
         //            End Select
-        //            If iArrCount = NumParamIn Then blnFlag = False
-        //            If iArrCount = (NumParamIn + NumParamOut) Then Exit For
+        //            if iArrCount = NumParamIn Then blnFlag = False
+        //            if iArrCount = (NumParamIn + NumParamOut) Then Exit For
+        //        }
+
+        //        For iArrCount = 1 To UBound(parametros)
+
         //        Next iArrCount
 
         //        For iArrCount = 0 To UBound(parametros)
         //            ArrObject = parametros(iArrCount + 1)
-        //            If iArrCount <= NumParamIn - 1 Then
+        //            if iArrCount <= NumParamIn - 1 Then
         //                AdoCmd(iArrCount).Value = ArrObject(0)
         //            Else
         //                Exit For
-        //            End If
+        //            End if
         //        Next iArrCount
 
 
@@ -325,13 +347,22 @@ namespace MTSCPolizas.Modulos
 
         //        Exit Function
 
-        //msgerror:
+        //        }
+        //        catch (Exception)
+        //        {
+        //        msgerror:
 
-        //        ExecSPs = False
-        //        sErrVB = String.Format$(Err.Number) & vbTab & Err.Source & vbTab & Err.Description
-        //        errAdo = ErroresDLL(cnnCn, sErrVB)
+        //            ExecSPs = False
+        //            sErrVB = String.Format$(Err.Number) & vbTab & Err.Source & vbTab & Err.Description
+        //            errAdo = ErroresDLL(cnnCn, sErrVB)
 
-        //    End Function
+        //            throw;
+        //        }
+
+        //    }
+
+
+
         //    //__________________________________________________________
         //    //Descripción :
         //    //   La siguiente función Ejecuta un Stored Procedure Regresando un Recordset
@@ -353,14 +384,14 @@ namespace MTSCPolizas.Modulos
         //    public Function EjecutaSPs(ByRef errAdo As ADODB.Recordset, ByRef varDSN As String, ByRef RsAdo As ADODB.Recordset, parametros As Object) As Boolean
         //        On Error GoTo msgerror
 
-        //        cnnCn = New ADODB.Connection
+        //        cnnCn = new ADODB.Connection
         //        cnnCn.Open(varDSN)
         //        cnnCn.CommandTimeout = 0 //20200911. Alexander Hdez se cambio el timeout de 300 a 0
 
         //        sSql = parametros(0) & " "
         //        iArrCount = 0
         //        For Each vParams In parametros
-        //            If iArrCount<> 0 Then
+        //            if iArrCount<> 0 Then
         //                Select Case VarType(vParams)
 
         //                    Case 2  //Integer
@@ -377,7 +408,7 @@ namespace MTSCPolizas.Modulos
         //                        sSql = sSql & "//" & vParams & "//,"
 
         //                End Select
-        //            End If
+        //            End if
         //            iArrCount = iArrCount + 1
         //        Next
         //        sSql = Mid(sSql, 1, Len(sSql) - 1)
@@ -418,7 +449,7 @@ namespace MTSCPolizas.Modulos
         //    //__________________________________________________________
         //    public Function ADORecordset(ByVal objConnection As ADODB.Connection, ByRef errAdo As ADODB.Recordset, Optional ByVal LockType As LockTypeEnum = adLockBatchOptimistic, Optional ByVal CursorType As CursorTypeEnum = adOpenDynamic, Optional CursorLocation As CursorLocationEnum = adUseClient, Optional ByVal SQL As String = "") As ADODB.Recordset
         //        Dim adoInRs As ADODB.Recordset
-        //        adoInRs = New ADODB.Recordset
+        //        adoInRs = new ADODB.Recordset
         //        adoInRs.ActiveConnection = objConnection
         //        adoInRs.CursorLocation = CursorLocation
         //        adoInRs.CursorType = CursorType
@@ -446,7 +477,7 @@ namespace MTSCPolizas.Modulos
         //    //__________________________________________________________
         //    public Function ExecSql(sDsn As String, sSql As String, rsErr1 As ADODB.Recordset) As Boolean
         //        Dim cmdComan As ADODB.Command
-        //        Dim cnnConn As New ADODB.Connection
+        //        Dim cnnConn As new ADODB.Connection
 
         //        On Error GoTo msgerror
 
@@ -454,7 +485,7 @@ namespace MTSCPolizas.Modulos
         //        cnnConn.Open(sDsn)
         //        cnnConn.CommandTimeout = 0 //Alexander Hernandez 2017-08-10
 
-        //        cmdComan = New ADODB.Command
+        //        cmdComan = new ADODB.Command
 
         //        ExecSql = True
 
@@ -508,7 +539,7 @@ namespace MTSCPolizas.Modulos
         //    public Function InsertaBitacora(sDsn As String, sComando As String, rsDatosUser As ADODB.Recordset, rsErr1 As ADODB.Recordset) As Boolean
         //        Dim sErrVB As String
         //        Dim cmdComan As ADODB.Command
-        //        Dim cnnConn As New ADODB.Connection
+        //        Dim cnnConn As new ADODB.Connection
         //        Dim sSql As String
 
         //        On Error GoTo msgerror
@@ -517,7 +548,7 @@ namespace MTSCPolizas.Modulos
         //        cnnConn.Open(sDsn)
         //        cnnConn.CommandTimeout = 0 //Alexander Hernandez 2017-08-10
 
-        //        cmdComan = New ADODB.Command
+        //        cmdComan = new ADODB.Command
 
         //        InsertaBitacora = True
 
@@ -552,14 +583,14 @@ namespace MTSCPolizas.Modulos
 
         //    public Function EjecutaStoredProcedure(ByRef errAdo As ADODB.Recordset, ByRef varDSN As String, ByRef RsAdo As ADODB.Recordset, parametros As Object) As Boolean
         //        On Error GoTo msgerror
-        //        cnnCn = New ADODB.Connection
+        //        cnnCn = new ADODB.Connection
         //        cnnCn.Open(varDSN)
         //        cnnCn.CommandTimeout = 0
 
         //        sSql = parametros(0) & " "
         //        iArrCount = 0
         //        For Each vParams In parametros
-        //            If iArrCount<> 0 Then
+        //            if iArrCount<> 0 Then
         //                Select Case VarType(vParams)
         //                    Case 1  //NULL
         //                        sSql = sSql & "null,"
@@ -578,7 +609,7 @@ namespace MTSCPolizas.Modulos
         //                    Case 14 //Decimal
         //                        sSql = sSql & vParams & ","
         //                End Select
-        //            End If
+        //            End if
         //            iArrCount = iArrCount + 1
         //        Next
         //        sSql = Mid(sSql, 1, Len(sSql) - 1)
@@ -607,7 +638,7 @@ namespace MTSCPolizas.Modulos
         //        sSql = parametros(0) & " "
         //        iArrCount = 0
         //        For Each vParams In parametros
-        //            If iArrCount<> 0 Then
+        //            if iArrCount<> 0 Then
         //                Select Case VarType(vParams)
         //                    Case 1  //NULL
         //                        sSql = sSql & "null,"
@@ -626,7 +657,7 @@ namespace MTSCPolizas.Modulos
         //                    Case 14 //Decimal
         //                        sSql = sSql & vParams & ","
         //                End Select
-        //            End If
+        //            End if
         //            iArrCount = iArrCount + 1
         //        Next
         //        sSql = Mid(sSql, 1, Len(sSql) - 1)
@@ -665,7 +696,7 @@ namespace MTSCPolizas.Modulos
         //    //__________________________________________________________
         //    public Function ExecSqlROPC(sDsn As String, sSqlConta As String, rsErr1 As ADODB.Recordset) As Boolean
         //        Dim cmdComan As ADODB.Command
-        //        Dim cnnConn As New ADODB.Connection
+        //        Dim cnnConn As new ADODB.Connection
 
         //        On Error GoTo msgerror
 
@@ -674,7 +705,7 @@ namespace MTSCPolizas.Modulos
 
         //        //cnnConn.BeginTrans
 
-        //        cmdComan = New ADODB.Command
+        //        cmdComan = new ADODB.Command
 
         //        ExecSqlROPC = True
 
