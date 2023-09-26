@@ -255,7 +255,7 @@
             Name = "frmCISSSTE";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CAIRO - PRÉSTAMOS ISSSTE";
-            Load += frmCISSSTE_Load_1;
+            Load += frmCISSSTE_Load;
             abdCPrestH.ResumeLayout(false);
             abdCPrestH.PerformLayout();
             groupBox1.ResumeLayout(false);

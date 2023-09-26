@@ -1,6 +1,7 @@
 ﻿
 using ADODB;
 using MTSCPolizas;
+using System.Configuration;
 using static bbva_cairo.Modulos.ModGeneral;
 
 namespace bbva_cairo.Formularios
@@ -40,10 +41,13 @@ namespace bbva_cairo.Formularios
         //    bReset = false;
         //}
 
-        private void frmCISSSTE_Load_1(object sender, EventArgs e)
+        private void frmCISSSTE_Load(object sender, EventArgs e)
         {
             if (bReset)
             {
+                gsConexion = ConfigurationManager.AppSettings["ConString"];
+                iPolizaPrest = 1002639723;
+
                 GetPrestamos();
                 grdPtmosActivos_Click();
             }
@@ -331,10 +335,7 @@ namespace bbva_cairo.Formularios
             }
         }
 
-        private void frmCISSSTE_Load(object sender, EventArgs e)
-        {
-
-        }
+       
 
 
     }
