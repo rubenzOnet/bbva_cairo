@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCISSSTE));
-            toolStrip1 = new ToolStrip();
+            abdCPrestH = new ToolStrip();
             toolStripButton1 = new ToolStripButton();
             groupBox1 = new GroupBox();
             grdDescXPtmos = new DataGridView();
@@ -49,21 +49,21 @@
             lblEstado = new TextBox();
             lblNoPtmo = new TextBox();
             grdPtmosActivos = new DataGridView();
-            toolStrip1.SuspendLayout();
+            abdCPrestH.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)grdDescXPtmos).BeginInit();
             fmeISSSTE.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)grdPtmosActivos).BeginInit();
             SuspendLayout();
             // 
-            // toolStrip1
+            // abdCPrestH
             // 
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton1 });
-            toolStrip1.Location = new Point(0, 0);
-            toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(800, 25);
-            toolStrip1.TabIndex = 0;
-            toolStrip1.Text = "toolStrip1";
+            abdCPrestH.Items.AddRange(new ToolStripItem[] { toolStripButton1 });
+            abdCPrestH.Location = new Point(0, 0);
+            abdCPrestH.Name = "abdCPrestH";
+            abdCPrestH.Size = new Size(800, 25);
+            abdCPrestH.TabIndex = 0;
+            abdCPrestH.Text = "toolStrip1";
             // 
             // toolStripButton1
             // 
@@ -251,14 +251,14 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 666);
             Controls.Add(groupBox1);
-            Controls.Add(toolStrip1);
+            Controls.Add(abdCPrestH);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "frmCISSSTE";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CAIRO - PRÉSTAMOS ISSSTE";
             Load += frmCISSSTE_Load;
-            toolStrip1.ResumeLayout(false);
-            toolStrip1.PerformLayout();
+            abdCPrestH.ResumeLayout(false);
+            abdCPrestH.PerformLayout();
             groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)grdDescXPtmos).EndInit();
             fmeISSSTE.ResumeLayout(false);
@@ -270,7 +270,7 @@
 
         #endregion
 
-        private ToolStrip toolStrip1;
+        private ToolStrip abdCPrestH;
         private ToolStripButton toolStripButton1;
         private GroupBox groupBox1;
         private DataGridView grdPtmosActivos;
