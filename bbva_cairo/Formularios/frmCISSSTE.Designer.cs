@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCISSSTE));
             abdCPrestH = new ToolStrip();
-            toolStripButton1 = new ToolStripButton();
+            btnSalir = new ToolStripButton();
             groupBox1 = new GroupBox();
             grdDescXPtmos = new DataGridView();
             fmeISSSTE = new GroupBox();
@@ -58,22 +58,21 @@
             // 
             // abdCPrestH
             // 
-            abdCPrestH.Items.AddRange(new ToolStripItem[] { toolStripButton1 });
+            abdCPrestH.Items.AddRange(new ToolStripItem[] { btnSalir });
             abdCPrestH.Location = new Point(0, 0);
             abdCPrestH.Name = "abdCPrestH";
             abdCPrestH.Size = new Size(800, 25);
             abdCPrestH.TabIndex = 0;
             abdCPrestH.Text = "toolStrip1";
             // 
-            // toolStripButton1
+            // btnSalir
             // 
-            toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton1.Image = Properties.Resources.Salir;
-            toolStripButton1.ImageTransparentColor = Color.Magenta;
-            toolStripButton1.Name = "toolStripButton1";
-            toolStripButton1.Size = new Size(23, 22);
-            toolStripButton1.Text = "toolStripButton1";
-            toolStripButton1.Click += toolStripButton1_Click;
+            btnSalir.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnSalir.Image = Properties.Resources.Salir;
+            btnSalir.ImageTransparentColor = Color.Magenta;
+            btnSalir.Name = "btnSalir";
+            btnSalir.Size = new Size(23, 22);
+            btnSalir.Text = "toolStripButton1";
             // 
             // groupBox1
             // 
@@ -256,7 +255,7 @@
             Name = "frmCISSSTE";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "CAIRO - PRÉSTAMOS ISSSTE";
-            Load += frmCISSSTE_Load;
+            Load += frmCISSSTE_Load_1;
             abdCPrestH.ResumeLayout(false);
             abdCPrestH.PerformLayout();
             groupBox1.ResumeLayout(false);
@@ -271,7 +270,7 @@
         #endregion
 
         private ToolStrip abdCPrestH;
-        private ToolStripButton toolStripButton1;
+        private ToolStripButton btnSalir;
         private GroupBox groupBox1;
         private DataGridView grdPtmosActivos;
         private GroupBox fmeISSSTE;

@@ -1,50 +1,55 @@
-﻿using System.Configuration;
+﻿
+using ADODB;
 using MTSCPolizas;
 using static bbva_cairo.Modulos.ModGeneral;
-using System.Data;
-//using System.Data.SqlClient;
-using System.Data.OleDb;
-using ADODB;
 
 namespace bbva_cairo.Formularios
 {
     public partial class frmCISSSTE : Form
     {
 
-        public long iPolizaPrest;
-        public bool bRe;
-        public object gObjCPolizas;
-
-        private Recordset RsPrestamos;
-        private Recordset rsAbonos;
-        private int iRes;
-
         public frmCISSSTE()
         {
             InitializeComponent();
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        public long iPolizaPrest;
+        public bool bReset = true;
+        public object gObjCPolizas;
+        private Recordset RsPrestamos;
+        private Recordset rsAbonos;
+        private TipoResultado iRes;
+
+        // Refactoriza para C#
+        //Private Sub abdCPrestH_ToolClick(ByVal Tool As ActiveBar2LibraryCtl.Tool)
+        //    Select Case Tool.Name
+        //        Case "btnSalir"
+        //            Unload Me
+        //    End Select
+        //End Sub
+
+        //private void frmCISSSTE_Activated(object sender, EventArgs e)
+        //{
+        //    //'SDC 2010-01-15 Esto es para que cuando switchen entre pantalla y pantalla no se vuelva
+        //    //'a consultar, solo cuando venga de un click de frmCPolizas
+        //    if (bReset)
+        //    {
+        //        GetPrestamos();
+        //        grdPtmosActivos_Click();
+        //    }
+        //    bReset = false;
+        //}
+
+        private void frmCISSSTE_Load_1(object sender, EventArgs e)
         {
-            this.Close();
+            if (bReset)
+            {
+                GetPrestamos();
+                grdPtmosActivos_Click();
+            }
+            bReset = false;
         }
 
-        private void frmCISSSTE_Load(object sender, EventArgs e)
-        {
-            //SDC 2010-01-15 Esto es para que cuando switchen entre pantalla y pantalla no se vuelva
-            //a consultar, solo cuando venga de un click de frmCPolizas
-            gsConexion = ConfigurationManager.AppSettings["ConString"];
-            iPolizaPrest = 1002639723;
-
-            GetPrestamos();
-            grdPtmosActivos_Click();
-
-            //if bRe Then
-            //    GetPrestamos()
-            //    //grdPtmosActivos_Click()
-            //End if
-            //bRe = False
-        }
 
         private void GetPrestamos()
         {
@@ -55,35 +60,15 @@ namespace bbva_cairo.Formularios
             RsPrestamos = null;
             ClsCPolizas gObjCPolizas = new ClsCPolizas();
 
-
             vParametros[0] = iPolizaPrest;
-
-            iRes = gObjCPolizas.bGetDetPrestISS(ref RsPrestamos, gsConexion, grsErrADO, vParametros);
-
-            if (iRes == Convert.ToInt32(TipoResultado.DatosOK))
+            iRes = (TipoResultado)gObjCPolizas.bGetDetPrestISS(ref RsPrestamos, gsConexion, grsErrADO, vParametros);
+            if (iRes == TipoResultado.DatosOK)
             {
-                //double ID_Prestamo = Convert.ToDouble(RsPrestamos.Fields["ID_Prestamo"].Value);
-                //string Prestamo = RsPrestamos.Fields["Prestamo"].Value;
-                //string Tpo_Ptmo = RsPrestamos.Fields["Tpo_Ptmo"].Value;
-
-                OleDbDataAdapter DataAd = new OleDbDataAdapter();
-                DataTable dt = new DataTable();
-                DataAd.Fill(dt, RsPrestamos);
-
-
-                //SqlDataAdapter DataAd = new SqlDataAdapter();
-                //DataTable dt = new DataTable();
-                //dt = ModRecordset.ConvertRecordsetToDataTable(RsPrestamos);
-                //DataAd.Fill(dt, RsPrestamos);
-
-                grdPtmosActivos.DataSource = dt.DefaultView;
-                grdPtmosActivos.Columns[0].Visible = false;
-
-                //grdPtmosActivos.Caption = "Prestamos ISSSTE y FOVISSSTE (" & dt.DefaultView.Count & ")"
-                GetDetalleISS(iPolizaPrest, Convert.ToDouble(RsPrestamos.Fields["ID_Prestamo"].Value), RsPrestamos.Fields["Prestamo"].Value, RsPrestamos.Fields["Tpo_Ptmo"].Value); //Alexander Hdez 01/10/2012 Agregue Prestamos FOVISSSTE
-
-                //GetDetalleISS(iPolizaPrest, ID_Prestamo, Prestamo, Tpo_Ptmo); //Alexander Hdez 01/10/2012 Agregue Prestamos FOVISSSTE
-                // grdDescXPtmos.Caption = "Descuentos Aplicados al Préstamo: " & RsPrestamos.Fields("No_Prestamo").Value
+                grdPtmosActivos.DataSource = RsPrestamos;
+                //grdPtmosActivos.Caption = "Prestamos ISSSTE y FOVISSSTE (" & RsPrestamos.RecordCount & ")"
+                //'GetDetalleISS iPolizaPrest, RsPrestamos!ID_Prestamo, RsPrestamos!Prestamo 'Alexander Hdez 01 / 10 / 2012 comente Prestamos FOVISSSTE
+                GetDetalleISS(iPolizaPrest, RsPrestamos.Fields["ID_Prestamo"].Value, RsPrestamos.Fields["Prestamo"].Value, RsPrestamos.Fields["Tpo_Ptmo"].Value); //'Alexander Hdez 01/10/2012 Agregue Prestamos FOVISSSTE
+                //grdDescXPtmos.Caption = "Descuentos Aplicados al Préstamo: " & RsPrestamos!No_Prestamo
             }
             else
             {
@@ -98,9 +83,35 @@ namespace bbva_cairo.Formularios
 
         }
 
+
+        //'Private Sub GetDetalleISS(lPoliza As Long, dIDPrestamo As Double, sPtmo As String) 'Alexander Hdez 01/10/2012 comente Prestamos FOVISSSTE
+        private void GetDetalleISS(long lPoliza, double dIDPrestamo, string sPtmo, string Tpo_Ptmo) //'Alexander Hdez 01/10/2012 Agregue Prestamos FOVISSSTE
+        {
+            object[] vParametros = new object[3];
+
+            this.Cursor = Cursors.WaitCursor;
+
+            rsAbonos = null;
+            ClsCPolizas gObjCPolizas = new ClsCPolizas();
+
+            vParametros[0] = lPoliza;
+            vParametros[1] = dIDPrestamo;
+            vParametros[2] = Tpo_Ptmo; //''Alexander Hdez 01 / 10 / 2012 Agregue Prestamos FOVISSSTE
+
+            fmeISSSTE.Visible = true;
+            iRes = (TipoResultado)gObjCPolizas.bGetDetPtmoISS(ref rsAbonos, gsConexion, grsErrADO, vParametros);
+
+
+            if (iRes == TipoResultado.DatosOK)
+                grdDescXPtmos.DataSource = rsAbonos;
+
+            gObjCPolizas = null;
+            this.Cursor = Cursors.Default;
+        }
+
         private void LimpiaCampos()
         {
-            // Campos FmeISSSTE
+            //' Campos FmeISSSTE
             lblNoPtmo.Text = "";
             lblEstado.Text = "";
             lblNoDesc.Text = "0";
@@ -110,70 +121,17 @@ namespace bbva_cairo.Formularios
             lblImporte.Text = "0.00";
         }
 
-        private bool PrestamoConStatusBaja(long ID_Poliza, ref double ID_PrestamoActivo, ref int Plazo, ref double Saldo, ref double Saldo_Inicial, ref double Importe, ref int DescApli)
+        private void grdDescXPtmos_Click()
         {
-            bool PrestamoConStatusBajaRes = false;
-            Connection con;
-            con = new Connection();
-            Recordset rs;
-            rs = new Recordset();
-            con.Open(gsConexion);
-
-            rs.Open(" select ID_Poliza,ID_Prestamo,Tipo_Orden, Plazo , Saldo, Saldo_Inicial, Importe, DescApli      from Prestamos_ISSSTE where Prestamos_ISSSTE.ID_Poliza = " + ID_Poliza, con, CursorTypeEnum.adOpenDynamic, LockTypeEnum.adLockOptimistic);
-
-
-            while (!rs.EOF)
-            {
-                if (Convert.ToInt32(rs.Fields["Tipo_Orden"].Value) == 2)
-                {
-                    PrestamoConStatusBajaRes = true;
-                }
-                else
-                {
-                    ID_PrestamoActivo = Convert.ToDouble(rs.Fields["ID_Prestamo"].Value);
-                    Plazo = Convert.ToInt32(rs.Fields["Plazo"].Value);
-                    Saldo = Convert.ToDouble(rs.Fields["Saldo"].Value);
-                    Saldo_Inicial = Convert.ToDouble(rs.Fields["Saldo_Inicial"].Value);
-                    Importe = Convert.ToDouble(rs.Fields["Importe"].Value);
-                    DescApli = Convert.ToInt32(rs.Fields["DescApli"].Value);
-                }
-                rs.MoveNext();
-            }
-
-            rs.Close();
-            con.Close();
-
-            return PrestamoConStatusBajaRes;
+            //'''    lblNoPtmo.Caption = rsAbonos!ID_Prestamo
+            //'''    lblEstado.Caption = ""
+            //'''    lblNoDesc.Caption = rsAbonos!Num_Desc
+            //'''    lblSaldoActual.Caption = "0.00"
+            //'''    lblSaldoIni.Caption = "0.00"
+            //'''    lblDescApli.Caption = "0"
+            //'''    lblImporte.Caption = "0.00"
         }
 
-        //private void GetDetalleISS(long lPoliza, double dIDPrestamo, string sPtmo, string Tpo_Ptmo) //Alexander Hdez 01/10/2012 Agregue Prestamos FOVISSSTE
-        //{
-        //    object[] vParametros = new object[2];
-        //    this.Cursor = Cursors.WaitCursor;
-
-
-        //    ClsCPolizas gObjCPolizas = new ClsCPolizas();
-
-        //    vParametros[0] = lPoliza;
-        //    vParametros[1] = dIDPrestamo;
-        //    vParametros[2] = Tpo_Ptmo; //Alexander Hdez 01 / 10 / 2012 Agregue Prestamos FOVISSSTE
-
-        //    fmeISSSTE.Visible = true;
-
-        //    iRes = gObjCPolizas.bGetDetPtmoISS(ref rsAbonos, gsConexion, grsErrADO, vParametros);
-
-        //    if (iRes == Convert.ToInt32(TipoResultado.DatosOK))
-        //    {
-        //        SqlDataAdapter DataAd = new SqlDataAdapter();
-        //        DataSet ds = new DataSet();
-        //        DataAd.Fill(ds, "rsAbonos");
-
-        //        grdDescXPtmos.DataSource = ds;
-        //    }
-
-        //    gObjCPolizas = null;
-        //    this.Cursor = Cursors.Default;
-        //}
 
         private void grdPtmosActivos_Click()
         {
@@ -255,14 +213,9 @@ namespace bbva_cairo.Formularios
 
                 strEstatus = RsPrestamos.Fields["Status_Prestamo"].Value;
                 lblEstado.Text = strEstatus;
-
             }
 
-
         }
-
-        private void miFuncion()
-        { }
 
         private void ObtenDescApliFOVI(int No_Prestamo, long iPolizaPrest, string Tpo_Ptmo)
         {
@@ -284,9 +237,9 @@ namespace bbva_cairo.Formularios
             if (Tpo_Ptmo == "Seguro de Daños")
                 vParametros[2] = "138";
 
-            iRes = gObjCPolizas.bGetDescAplifOVI(RsDescApliFOVI, gsConexion, grsErrADO, vParametros); //.bGetDescApliFOVI(RsDescApliFOVI, gsConexion, grsErrADO, vParametros);
+            iRes = (TipoResultado)gObjCPolizas.bGetDescAplifOVI(RsDescApliFOVI, gsConexion, grsErrADO, vParametros); //.bGetDescApliFOVI(RsDescApliFOVI, gsConexion, grsErrADO, vParametros);
 
-            if (iRes == Convert.ToInt32(TipoResultado.DatosOK))
+            if (iRes == TipoResultado.DatosOK)
                 lblDescApli.Text = string.Format("{0:2}", RsDescApliFOVI.Fields["ID_Beneficio"].Value);
 
 
@@ -295,37 +248,95 @@ namespace bbva_cairo.Formularios
             this.Cursor = Cursors.Default;
         }
 
-        private void GetDetalleISS(long lPoliza, double dIDPrestamo, string sPtmo, string Tpo_Ptmo) // 'Alexander Hdez 01/10/2012 Agregue Prestamos FOVISSSTE
+        private bool PrestamoConStatusBaja(long ID_Poliza, ref double ID_PrestamoActivo, ref int Plazo, ref double Saldo, ref double Saldo_Inicial, ref double Importe, ref int DescApli)
         {
-            object[] vParametros = new object[3];
+            bool PrestamoConStatusBajaRes = false;
+            Connection con;
+            con = new Connection();
+            Recordset rs;
+            rs = new Recordset();
+            con.Open(gsConexion);
 
-            this.Cursor = Cursors.WaitCursor;
-            rsAbonos = null;
+            rs.Open(" select ID_Poliza,ID_Prestamo,Tipo_Orden, Plazo , Saldo, Saldo_Inicial, Importe, DescApli      from Prestamos_ISSSTE where Prestamos_ISSSTE.ID_Poliza = " + ID_Poliza, con, CursorTypeEnum.adOpenDynamic, LockTypeEnum.adLockOptimistic);
 
-            ClsCPolizas gObjCPolizas = new ClsCPolizas();
 
-            vParametros[0] = lPoliza;
-            vParametros[1] = dIDPrestamo;
-            vParametros[2] = Tpo_Ptmo; //''Alexander Hdez 01 / 10 / 2012 Agregue Prestamos FOVISSSTE
-
-            fmeISSSTE.Visible = true;
-            iRes = gObjCPolizas.bGetDetPtmoISS(ref rsAbonos, gsConexion, grsErrADO, vParametros);
-
-            if (iRes == Convert.ToInt32(TipoResultado.DatosOK))
+            while (!rs.EOF)
             {
-                OleDbDataAdapter DataAd = new OleDbDataAdapter();
-                DataTable dt = new DataTable();
-                DataAd.Fill(dt, rsAbonos);
-
-                grdDescXPtmos.DataSource = dt.DefaultView;
+                if (Convert.ToInt32(rs.Fields["Tipo_Orden"].Value) == 2)
+                {
+                    PrestamoConStatusBajaRes = true;
+                }
+                else
+                {
+                    ID_PrestamoActivo = Convert.ToDouble(rs.Fields["ID_Prestamo"].Value);
+                    Plazo = Convert.ToInt32(rs.Fields["Plazo"].Value);
+                    Saldo = Convert.ToDouble(rs.Fields["Saldo"].Value);
+                    Saldo_Inicial = Convert.ToDouble(rs.Fields["Saldo_Inicial"].Value);
+                    Importe = Convert.ToDouble(rs.Fields["Importe"].Value);
+                    DescApli = Convert.ToInt32(rs.Fields["DescApli"].Value);
+                }
+                rs.MoveNext();
             }
 
-            gObjCPolizas = null;
-            this.Cursor = Cursors.Default;
+            rs.Close();
+            con.Close();
+
+            return PrestamoConStatusBajaRes;
         }
 
 
 
 
+
+        private void grdPtmosActivos_RowColChange(object LastRow, int LastCol)
+        {
+            string strEstatus;
+            if (RsPrestamos == null) return;
+
+            if (RsPrestamos.RecordCount > 0)
+            {
+                lblNoPtmo.Text = (RsPrestamos.Fields["No_Prestamo"].Value == null) ? "" : RsPrestamos.Fields["No_Prestamo"].Value;
+                lblNoDesc.Text = RsPrestamos.Fields["Plazo"].Value;
+                lblSaldoActual.Text = string.Format("{0:#,##0.00}", RsPrestamos.Fields["Saldo"].Value);
+                lblSaldoIni.Text = string.Format("{0:#,##0.00}", RsPrestamos.Fields["Saldo_Inicial"].Value);
+                lblImporte.Text = string.Format("{0:#,##0.00}", RsPrestamos.Fields["Importe"].Value);
+                lblDescApli.Text = RsPrestamos.Fields["DescApli"].Value;
+                //'GetDetalleISS iPolizaPrest, RsPrestamos!ID_Prestamo, RsPrestamos!Prestamo 'Alexander Hdez 01 / 10 / 2012 Comente, Prestamos FOVISSSTE
+                GetDetalleISS(iPolizaPrest, RsPrestamos.Fields["ID_Prestamo"].Value, RsPrestamos.Fields["Prestamo"].Value, RsPrestamos.Fields["Tpo_Ptmo"].Value);   // 'Alexander Hdez 01/10/2012 Agregue, Prestamos FOVISSSTE
+
+                //'Alexander Hdez 04/10/2012, Prestamos FOVISSSTE, Muestra Descuentos Aplicados
+                // 'Inicio
+                if (RsPrestamos.Fields["Tpo_Ptmo"].Value == "Amortización" || RsPrestamos.Fields["Tpo_Ptmo"].Value == "Seguro de Daños")
+                {
+                    ObtenDescApliFOVI(RsPrestamos.Fields["No_Prestamo"].Value, iPolizaPrest, RsPrestamos.Fields["Tpo_Ptmo"].Value);
+                }
+                else
+                {
+                    lblDescApli.Text = RsPrestamos.Fields["DescApli"].Value;
+                }
+                //'Fin
+
+
+                strEstatus = RsPrestamos.Fields["Status_Prestamo"].Value;
+                lblEstado.Text = strEstatus;
+                if (rsAbonos.EOF == false)
+                {
+                    //'            Select Case rsAbonos!ID_StaPtmo
+                    //'                Case 1: strEstatus = "TRAMITE"
+                    //'                Case 2: strEstatus = "VIGENTE"
+                    //'                Case 3: strEstatus = "CANCELADO"
+                    //'                Case 4: strEstatus = "LIQUIDADO"
+                    //'            End Select
+                }
+            }
+        }
+
+        private void frmCISSSTE_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
     }
+
 }
