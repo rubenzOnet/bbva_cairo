@@ -65,7 +65,9 @@ namespace bbva_cairo.Formularios
             ClsCPolizas gObjCPolizas = new ClsCPolizas();
 
             vParametros[0] = iPolizaPrest;
+            
             iRes = (TipoResultado)gObjCPolizas.bGetDetPrestISS(ref RsPrestamos, gsConexion, grsErrADO, vParametros);
+
             if (iRes == TipoResultado.DatosOK)
             {
                 grdPtmosActivos.DataSource = RsPrestamos;
