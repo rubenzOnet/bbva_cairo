@@ -1,9 +1,6 @@
 ﻿
 using ADODB;
-using bbva_cairo.Classes;
-using MTSCPolizas;
 using System.Configuration;
-using static bbva_cairo.Modulos.ModGeneral;
 
 namespace bbva_cairo.Formularios
 {
@@ -20,7 +17,7 @@ namespace bbva_cairo.Formularios
         public object gObjCPolizas;
         private Recordset RsPrestamos;
         private Recordset rsAbonos;
-        private TipoResultado iRes;
+        private Modulos.ModGeneral.TipoResultado iRes;
 
         // Refactoriza para C#
         //Private Sub abdCPrestH_ToolClick(ByVal Tool As ActiveBar2LibraryCtl.Tool)
@@ -46,9 +43,7 @@ namespace bbva_cairo.Formularios
         {
             if (bReset)
             {
-
-
-                gsConexion = ConfigurationManager.AppSettings["ConString"];
+                Modulos.ModGeneral.gsConexion = ConfigurationManager.AppSettings["ConString"];
                 iPolizaPrest = 1002639723;
 
                 GetPrestamos();
@@ -65,13 +60,13 @@ namespace bbva_cairo.Formularios
 
             this.Cursor = Cursors.WaitCursor;
             RsPrestamos = null;
-            ClsCPolizas gObjCPolizas = new ClsCPolizas();
+            MTSCPolizas.ClsCPolizas gObjCPolizas = new MTSCPolizas.ClsCPolizas();
 
             vParametros[0] = iPolizaPrest;
             
-            iRes = (TipoResultado)gObjCPolizas.bGetDetPrestISS(ref RsPrestamos, gsConexion, grsErrADO, vParametros);
+            iRes = (Modulos.ModGeneral.TipoResultado)gObjCPolizas.bGetDetPrestISS(ref RsPrestamos, Modulos.ModGeneral.gsConexion, Modulos.ModGeneral.grsErrADO, vParametros);
 
-            if (iRes == TipoResultado.DatosOK)
+            if (iRes == Modulos.ModGeneral.TipoResultado.DatosOK)
             {
                 grdPtmosActivos.DataSource = RsPrestamos;
                 //grdPtmosActivos.Caption = "Prestamos ISSSTE y FOVISSSTE (" & RsPrestamos.RecordCount & ")"
@@ -101,17 +96,17 @@ namespace bbva_cairo.Formularios
             this.Cursor = Cursors.WaitCursor;
 
             rsAbonos = null;
-            ClsCPolizas gObjCPolizas = new ClsCPolizas();
+            MTSCPolizas.ClsCPolizas gObjCPolizas = new MTSCPolizas.ClsCPolizas();
 
             vParametros[0] = lPoliza;
             vParametros[1] = dIDPrestamo;
             vParametros[2] = Tpo_Ptmo; //''Alexander Hdez 01 / 10 / 2012 Agregue Prestamos FOVISSSTE
 
             fmeISSSTE.Visible = true;
-            iRes = (TipoResultado)gObjCPolizas.bGetDetPtmoISS(ref rsAbonos, gsConexion, grsErrADO, vParametros);
+            iRes = (Modulos.ModGeneral.TipoResultado)gObjCPolizas.bGetDetPtmoISS(ref rsAbonos, Modulos.ModGeneral.gsConexion, Modulos.ModGeneral.grsErrADO, vParametros);
 
 
-            if (iRes == TipoResultado.DatosOK)
+            if (iRes == Modulos.ModGeneral.TipoResultado.DatosOK)
                 grdDescXPtmos.DataSource = rsAbonos;
 
             gObjCPolizas = null;
@@ -234,8 +229,7 @@ namespace bbva_cairo.Formularios
 
             this.Cursor = Cursors.WaitCursor;
             RsDescApliFOVI = null;
-            // gObjCPolizas = CreateObject("MTSCPolizas.ClsCPolizas")
-            ClsCPolizas gObjCPolizas = new ClsCPolizas();
+            MTSCPolizas.ClsCPolizas gObjCPolizas = new MTSCPolizas.ClsCPolizas();
 
             vParametros[0] = No_Prestamo;
             vParametros[1] = iPolizaPrest;
@@ -246,9 +240,9 @@ namespace bbva_cairo.Formularios
             if (Tpo_Ptmo == "Seguro de Daños")
                 vParametros[2] = "138";
 
-            iRes = (TipoResultado)gObjCPolizas.bGetDescAplifOVI(RsDescApliFOVI, gsConexion, grsErrADO, vParametros); //.bGetDescApliFOVI(RsDescApliFOVI, gsConexion, grsErrADO, vParametros);
+            iRes = (Modulos.ModGeneral.TipoResultado)gObjCPolizas.bGetDescAplifOVI(RsDescApliFOVI, Modulos.ModGeneral.gsConexion, Modulos.ModGeneral.grsErrADO, vParametros); //.bGetDescApliFOVI(RsDescApliFOVI, gsConexion, grsErrADO, vParametros);
 
-            if (iRes == TipoResultado.DatosOK)
+            if (iRes == Modulos.ModGeneral.TipoResultado.DatosOK)
                 lblDescApli.Text = string.Format("{0:2}", RsDescApliFOVI.Fields["ID_Beneficio"].Value);
 
 
@@ -264,7 +258,7 @@ namespace bbva_cairo.Formularios
             con = new Connection();
             Recordset rs;
             rs = new Recordset();
-            con.Open(gsConexion);
+            con.Open(Modulos.ModGeneral.gsConexion);
 
             rs.Open(" select ID_Poliza,ID_Prestamo,Tipo_Orden, Plazo , Saldo, Saldo_Inicial, Importe, DescApli      from Prestamos_ISSSTE where Prestamos_ISSSTE.ID_Poliza = " + ID_Poliza, con, CursorTypeEnum.adOpenDynamic, LockTypeEnum.adLockOptimistic);
 
