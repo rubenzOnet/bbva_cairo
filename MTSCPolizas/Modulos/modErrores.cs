@@ -86,7 +86,7 @@ namespace MTSCPolizas.Modulos
                         Console.WriteLine("ADO Error Description: " + adoError.Description);
                         sError = ex.Message;
                         sDescripcion = adoError.Description;
-                        sOrigen = rsdatos.Source;
+                        sOrigen = rsdatos.Source.ToString();
 
                         rsdatos.AddNew(valor1, valor2);
 

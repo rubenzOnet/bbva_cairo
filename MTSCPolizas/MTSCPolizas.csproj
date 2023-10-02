@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="Interop.ADODB">
+      <HintPath>..\MTSEndososCET\obj\Debug\net7.0\Interop.ADODB.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
