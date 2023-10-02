@@ -1,8 +1,5 @@
 ﻿using System.Configuration;
-using MTSCPolizas;
-using static bbva_cairo.Modulos.ModGeneral;
 using System.Data;
-//using System.Data.SqlClient;
 using System.Data.OleDb;
 using ADODB;
 
@@ -10,11 +7,9 @@ namespace bbva_cairo.Formularios
 {
     public partial class frmCISSSTE : Form
     {
-
         public long iPolizaPrest;
         public bool bRe;
         public object gObjCPolizas;
-
         private Recordset RsPrestamos;
         private Recordset rsAbonos;
         private int iRes;
@@ -33,7 +28,7 @@ namespace bbva_cairo.Formularios
         {
             //SDC 2010-01-15 Esto es para que cuando switchen entre pantalla y pantalla no se vuelva
             //a consultar, solo cuando venga de un click de frmCPolizas
-            gsConexion = ConfigurationManager.AppSettings["ConString"];
+            Modulos.ModGeneral.gsConexion = ConfigurationManager.AppSettings["ConString"];
             iPolizaPrest = 1002639723;
 
             GetPrestamos();
@@ -53,14 +48,14 @@ namespace bbva_cairo.Formularios
 
             this.Cursor = Cursors.WaitCursor;
             RsPrestamos = null;
-            ClsCPolizas gObjCPolizas = new ClsCPolizas();
+            MTSCPolizas.ClsCPolizas gObjCPolizas = new MTSCPolizas.ClsCPolizas();
 
 
             vParametros[0] = iPolizaPrest;
 
-            iRes = gObjCPolizas.bGetDetPrestISS(ref RsPrestamos, gsConexion, grsErrADO, vParametros);
+            iRes = gObjCPolizas.bGetDetPrestISS(ref RsPrestamos, Modulos.ModGeneral.gsConexion, Modulos.ModGeneral.grsErrADO, vParametros);
 
-            if (iRes == Convert.ToInt32(TipoResultado.DatosOK))
+            if (iRes == Convert.ToInt32(Modulos.ModGeneral.TipoResultado.DatosOK))
             {
                 //double ID_Prestamo = Convert.ToDouble(RsPrestamos.Fields["ID_Prestamo"].Value);
                 //string Prestamo = RsPrestamos.Fields["Prestamo"].Value;
@@ -117,7 +112,7 @@ namespace bbva_cairo.Formularios
             con = new Connection();
             Recordset rs;
             rs = new Recordset();
-            con.Open(gsConexion);
+            con.Open(Modulos.ModGeneral.gsConexion);
 
             rs.Open(" select ID_Poliza,ID_Prestamo,Tipo_Orden, Plazo , Saldo, Saldo_Inicial, Importe, DescApli      from Prestamos_ISSSTE where Prestamos_ISSSTE.ID_Poliza = " + ID_Poliza, con, CursorTypeEnum.adOpenDynamic, LockTypeEnum.adLockOptimistic);
 
@@ -273,7 +268,7 @@ namespace bbva_cairo.Formularios
             this.Cursor = Cursors.WaitCursor;
             RsDescApliFOVI = null;
             // gObjCPolizas = CreateObject("MTSCPolizas.ClsCPolizas")
-            ClsCPolizas gObjCPolizas = new ClsCPolizas();
+            MTSCPolizas.ClsCPolizas gObjCPolizas = new MTSCPolizas.ClsCPolizas();
 
             vParametros[0] = No_Prestamo;
             vParametros[1] = iPolizaPrest;
@@ -284,9 +279,9 @@ namespace bbva_cairo.Formularios
             if (Tpo_Ptmo == "Seguro de Daños")
                 vParametros[2] = "138";
 
-            iRes = gObjCPolizas.bGetDescAplifOVI(RsDescApliFOVI, gsConexion, grsErrADO, vParametros); //.bGetDescApliFOVI(RsDescApliFOVI, gsConexion, grsErrADO, vParametros);
+            iRes = gObjCPolizas.bGetDescAplifOVI(RsDescApliFOVI, Modulos.ModGeneral.gsConexion, Modulos.ModGeneral.grsErrADO, vParametros); //.bGetDescApliFOVI(RsDescApliFOVI, gsConexion, grsErrADO, vParametros);
 
-            if (iRes == Convert.ToInt32(TipoResultado.DatosOK))
+            if (iRes == Convert.ToInt32(Modulos.ModGeneral.TipoResultado.DatosOK))
                 lblDescApli.Text = string.Format("{0:2}", RsDescApliFOVI.Fields["ID_Beneficio"].Value);
 
 
@@ -302,16 +297,16 @@ namespace bbva_cairo.Formularios
             this.Cursor = Cursors.WaitCursor;
             rsAbonos = null;
 
-            ClsCPolizas gObjCPolizas = new ClsCPolizas();
+            MTSCPolizas.ClsCPolizas gObjCPolizas = new MTSCPolizas.ClsCPolizas();
 
             vParametros[0] = lPoliza;
             vParametros[1] = dIDPrestamo;
             vParametros[2] = Tpo_Ptmo; //''Alexander Hdez 01 / 10 / 2012 Agregue Prestamos FOVISSSTE
 
             fmeISSSTE.Visible = true;
-            iRes = gObjCPolizas.bGetDetPtmoISS(ref rsAbonos, gsConexion, grsErrADO, vParametros);
+            iRes = gObjCPolizas.bGetDetPtmoISS(ref rsAbonos, Modulos.ModGeneral.gsConexion, Modulos.ModGeneral.grsErrADO, vParametros);
 
-            if (iRes == Convert.ToInt32(TipoResultado.DatosOK))
+            if (iRes == Convert.ToInt32(Modulos.ModGeneral.TipoResultado.DatosOK))
             {
                 OleDbDataAdapter DataAd = new OleDbDataAdapter();
                 DataTable dt = new DataTable();
