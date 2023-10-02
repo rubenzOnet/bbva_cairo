@@ -53,7 +53,7 @@ namespace bbva_cairo.Formularios
 
             vParametros[0] = iPolizaPrest;
 
-            iRes = gObjCPolizas.bGetDetPrestISS(ref RsPrestamos, Modulos.ModGeneral.gsConexion, Modulos.ModGeneral.grsErrADO, vParametros);
+            iRes = (Modulos.ModGeneral.TipoResultado)gObjCPolizas.bGetDetPrestISS(ref RsPrestamos, Modulos.ModGeneral.gsConexion, Modulos.ModGeneral.grsErrADO, vParametros);
 
             if (iRes == Convert.ToInt32(Modulos.ModGeneral.TipoResultado.DatosOK))
             {
@@ -279,7 +279,7 @@ namespace bbva_cairo.Formularios
             if (Tpo_Ptmo == "Seguro de Daños")
                 vParametros[2] = "138";
 
-            iRes = gObjCPolizas.bGetDescAplifOVI(RsDescApliFOVI, Modulos.ModGeneral.gsConexion, Modulos.ModGeneral.grsErrADO, vParametros); //.bGetDescApliFOVI(RsDescApliFOVI, gsConexion, grsErrADO, vParametros);
+            iRes = (Modulos.ModGeneral.TipoResultado)gObjCPolizas.bGetDescAplifOVI(RsDescApliFOVI, Modulos.ModGeneral.gsConexion, Modulos.ModGeneral.grsErrADO, vParametros); //.bGetDescApliFOVI(RsDescApliFOVI, gsConexion, grsErrADO, vParametros);
 
             if (iRes == Convert.ToInt32(Modulos.ModGeneral.TipoResultado.DatosOK))
                 lblDescApli.Text = string.Format("{0:2}", RsDescApliFOVI.Fields["ID_Beneficio"].Value);
