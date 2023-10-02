@@ -7,15 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <COMReference Include="ADODB">
-      <WrapperTool>tlbimp</WrapperTool>
-      <VersionMinor>1</VersionMinor>
-      <VersionMajor>6</VersionMajor>
-      <Guid>b691e011-1797-432e-907a-4d8c69339129</Guid>
-      <Lcid>0</Lcid>
-      <Isolated>false</Isolated>
-      <EmbedInteropTypes>true</EmbedInteropTypes>
-    </COMReference>
+    <PackageReference Include="System.Data.OleDb" Version="7.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Interop.ADODB">
+      <HintPath>..\MTSEndososCET\obj\Debug\net7.0\Interop.ADODB.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

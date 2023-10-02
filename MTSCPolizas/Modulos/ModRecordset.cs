@@ -1,7 +1,9 @@
-﻿using System;
+﻿using ADODB;
 using System.Data;
-using ADODB;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Data.OleDb;
+
+
+
 
 namespace MTSCPolizas.Modulos
 {
@@ -76,6 +78,11 @@ namespace MTSCPolizas.Modulos
 
         public static int EjecutaSql(ref Recordset rsData, string sDsn, string sSql, Recordset err1, LockTypeEnum LockType = LockTypeEnum.adLockBatchOptimistic, CursorTypeEnum CursorType = CursorTypeEnum.adOpenDynamic, CursorLocationEnum CursorLocation = CursorLocationEnum.adUseClient)
         {
+
+            RgbConn rgbConn = new RgbConn();
+            rgbConn.conectase();
+
+
             Recordset rsdatos = new Recordset();
             Connection cnConn;
             TipoResultado EjecutaSqlRet;

@@ -1,7 +1,4 @@
-﻿
-using ADODB;
-using MTSCPolizas.Modulos;
-using static MTSCPolizas.Modulos.ModRecordset;
+﻿using ADODB;
 
 namespace MTSCPolizas
 {
@@ -34,7 +31,9 @@ namespace MTSCPolizas
 
             try
             {
-                bGetDetPrestISSRes = Convert.ToInt32(TipoResultado.NoHayDatos);
+
+
+                bGetDetPrestISSRes = Convert.ToInt32(MTSCPolizas.Modulos.ModRecordset.TipoResultado.NoHayDatos);
 
                 sSql = "Select '1', pri.ID_Prestamo as ID_Prestamo, 'ISS' As Prestamo, pri.ID_Poliza, p.Fol_Poliza, 'Personal' As Tpo_Ptmo, cast(ID_PtmoISSSTE as bigint) As No_Prestamo,";
                 sSql = sSql + " right(MesRpt, 2) + '/' + left(MesRpt, 4) As Fch_Aplicacion,";
@@ -56,7 +55,7 @@ namespace MTSCPolizas
                 sSql = sSql + "  p.ID_Poliza=" + parametros[0];
                 sSql = sSql + " order by 1";
 
-                bGetDetPrestISSRes = EjecutaSql(ref rsData, sConn, sSql, rsErrAdo);
+                bGetDetPrestISSRes = MTSCPolizas.Modulos.ModRecordset.EjecutaSql(ref rsData, sConn, sSql, rsErrAdo);
 
                 //Exit Function
                 return bGetDetPrestISSRes;
@@ -65,8 +64,8 @@ namespace MTSCPolizas
             {
                 //bGetDetPrestISS_Err:
                 errVB = Err.Source + "\t" + Err.Message;
-                rsErrAdo = modErrores.ErroresDLL(null, errVB);
-                return Convert.ToInt32(TipoResultado.ExisteError);
+                rsErrAdo = MTSCPolizas.Modulos.modErrores.ErroresDLL(null, errVB);
+                return Convert.ToInt32(MTSCPolizas.Modulos.ModRecordset.TipoResultado.ExisteError);
             }
 
         }
@@ -75,7 +74,7 @@ namespace MTSCPolizas
         {
             string sSql;
             string errVB;
-            TipoResultado bGetPolizasRet;
+            MTSCPolizas.Modulos.ModRecordset.TipoResultado bGetPolizasRet;
             int result = 0;
 
             // On Error GoTo errGetPolizas
@@ -83,7 +82,7 @@ namespace MTSCPolizas
             try
             {
 
-                bGetPolizasRet = TipoResultado.NoHayDatos;
+                bGetPolizasRet = MTSCPolizas.Modulos.ModRecordset.TipoResultado.NoHayDatos;
 
                 //Validación, para saber si viene del Ajustes ROPC o de algun otro modulo de consulta
                 //JCMN 09-06-2015 --Inicio
@@ -106,7 +105,7 @@ namespace MTSCPolizas
                             " and Polizas.ID_Empresa between " + parametros[0] + " and " + parametros[1];
                     sSql = sSql + " and Polizas.ID_Poliza = " + parametros[8] + " order by Polizas.Fol_Poliza";
 
-                    result = EjecutaSql(ref rsData, sConn, sSql, rsErrAdo);
+                    result = MTSCPolizas.Modulos.ModRecordset.EjecutaSql(ref rsData, sConn, sSql, rsErrAdo);
 
                     return result;
                 }
@@ -139,7 +138,7 @@ namespace MTSCPolizas
 
                     sSql += " order by Polizas.Fol_Poliza";
 
-                    result = EjecutaSql(ref rsData, sConn, sSql, rsErrAdo);
+                    result = MTSCPolizas.Modulos.ModRecordset.EjecutaSql(ref rsData, sConn, sSql, rsErrAdo);
                     return result;
                 }
                 //Exit Function
@@ -164,7 +163,7 @@ namespace MTSCPolizas
 
             try
             {
-                bGetDetPtmoISSRes = Convert.ToInt32(TipoResultado.NoHayDatos);
+                bGetDetPtmoISSRes = Convert.ToInt32(MTSCPolizas.Modulos.ModRecordset.TipoResultado.NoHayDatos);
 
                 //sSql = "EXEC sp_ConsultaDescISS " & parametros(0) & ", " & parametros(1)  //Alexander Hdez 01/10/2012 Comente Linea Prestamos FOVISSSTE
                 sSql = "EXEC sp_ConsultaDescISS " + parametros[0] + ", " + parametros[1] + ", " + parametros[2]; //Alexander Hdez 01/10/2012 Comente Linea Prestamos FOVISSSTE
@@ -180,7 +179,7 @@ namespace MTSCPolizas
                 //        "                           inner join Cat_StaPtmo cat on cat.ID_StaPtmo=pri.ID_StaPtmo " & _
                 //        " Where pri.ID_Poliza = " & parametros(0) & " And pri.ID_Prestamo = " & parametros(1)
 
-                bGetDetPtmoISSRes = EjecutaSql(ref rsData, sConn, sSql, rsErrAdo);
+                bGetDetPtmoISSRes = MTSCPolizas.Modulos.ModRecordset.EjecutaSql(ref rsData, sConn, sSql, rsErrAdo);
 
                 return bGetDetPtmoISSRes;
                 //Exit Function
@@ -189,7 +188,7 @@ namespace MTSCPolizas
             {
                 //errGetDetPrest:
                 errVB = Err.Source + "\t" + Err.Message;
-                rsErrAdo = modErrores.ErroresDLL(null, errVB);
+                rsErrAdo = MTSCPolizas.Modulos.modErrores.ErroresDLL(null, errVB);
                 return bGetDetPtmoISSRes;
             }
 
@@ -2025,7 +2024,7 @@ namespace MTSCPolizas
             try
             {
 
-            bGetDescAplifOVIRes = Convert.ToInt32(TipoResultado.NoHayDatos);
+            bGetDescAplifOVIRes = Convert.ToInt32(MTSCPolizas.Modulos.ModRecordset.TipoResultado.NoHayDatos);
 
             sSql = "SELECT Count(m.ID_Beneficio)ID_Beneficio   FROM Pagos p ";
             sSql = sSql + " INNER JOIN MPagos m ON m.ID_Pago=p.ID_Pago ";
@@ -2035,7 +2034,7 @@ namespace MTSCPolizas
             sSql = sSql + " AND pf2.ID_Prestamo=//" + parametros[0] + "//) ";
 
 
-            bGetDescAplifOVIRes = EjecutaSql(ref rsData, sConn, sSql, rsErrAdo);
+            bGetDescAplifOVIRes = MTSCPolizas.Modulos.ModRecordset.EjecutaSql(ref rsData, sConn, sSql, rsErrAdo);
 
             return bGetDescAplifOVIRes;
 
@@ -2045,8 +2044,8 @@ namespace MTSCPolizas
             {
                 //errGetDescAplifOVI:
                 errVB = Err.Source + "\t" + Err.Message;
-                rsErrAdo = modErrores.ErroresDLL(null, errVB);
-                return Convert.ToInt32(TipoResultado.ExisteError);
+                rsErrAdo = MTSCPolizas.Modulos.modErrores.ErroresDLL(null, errVB);
+                return Convert.ToInt32(MTSCPolizas.Modulos.ModRecordset.TipoResultado.ExisteError);
             }
 
         }

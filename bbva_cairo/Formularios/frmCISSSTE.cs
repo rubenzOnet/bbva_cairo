@@ -1,5 +1,6 @@
 ﻿
 using ADODB;
+using bbva_cairo.Classes;
 using MTSCPolizas;
 using System.Configuration;
 using static bbva_cairo.Modulos.ModGeneral;
@@ -45,6 +46,8 @@ namespace bbva_cairo.Formularios
         {
             if (bReset)
             {
+
+
                 gsConexion = ConfigurationManager.AppSettings["ConString"];
                 iPolizaPrest = 1002639723;
 
