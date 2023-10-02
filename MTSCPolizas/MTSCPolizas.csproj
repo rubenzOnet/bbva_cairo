@@ -11,4 +11,10 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Interop.ADODB">
+      <HintPath>..\MTSEndososCET\obj\Debug\net7.0\Interop.ADODB.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
