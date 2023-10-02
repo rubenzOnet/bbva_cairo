@@ -72,7 +72,7 @@ namespace MTSCPolizas
         {
             string sSql;
             string errVB;
-            MTSCPolizas.Modulos.ModRecordset.TipoResultado bGetPolizasRet;
+            Modulos.ModRecordset.TipoResultado bGetPolizasRet;
             int result = 0;
 
             // On Error GoTo errGetPolizas

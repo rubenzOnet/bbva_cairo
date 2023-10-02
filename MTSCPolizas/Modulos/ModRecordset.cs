@@ -1,7 +1,7 @@
-﻿using System;
+﻿
 using System.Data;
 using ADODB;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace MTSCPolizas.Modulos
 {
